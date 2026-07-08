@@ -72,7 +72,7 @@ export default function SendTZBlock() {
 
           <FadeIn delay={100}>
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(onSubmit)} noValidate
               className="card-base p-8 shadow-xl shadow-black/30 md:p-10"
             >
               <Honeypot register={register} name="website_url" />

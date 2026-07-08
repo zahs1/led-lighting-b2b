@@ -58,7 +58,7 @@ export default function FinalApplicationForm() {
           <FadeIn delay={80}>
             <form
               className="glass p-8 shadow-2xl shadow-black/40 md:p-10"
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(onSubmit)} noValidate
             >
               <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
