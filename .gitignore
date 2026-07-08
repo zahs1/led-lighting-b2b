@@ -47,3 +47,6 @@ next-env.d.ts
 
 # local npm prefix (machine-specific)
 .npmrc
+
+# local Claude Code config (hookify rules, settings.local.json) — not for the repo
+.claude/
