@@ -14,8 +14,8 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
-          // Content-Security-Policy устанавливается в src/middleware.ts
-          // (nonce-based, per-request). Не дублируем здесь.
+          // Content-Security-Policy устанавливается в src/proxy.ts
+          // (Next 16 proxy convention, nonce-based, per-request). Не дублируем здесь.
         ],
       },
     ];
