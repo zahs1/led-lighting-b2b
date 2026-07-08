@@ -35,5 +35,8 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 60 * 1000,
+    // Высокий лимит для e2e, чтобы форма-тесты не падали от in-memory rate-limit
+    // (5/мин на общий IP 127.0.0.1). На проде env не задан → дефолт 5.
+    env: { RATE_LIMIT_MAX: "1000" },
   },
 });
