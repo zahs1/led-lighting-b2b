@@ -5,6 +5,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteConfig } from "@/lib/site-config";
 
+// nonce-based CSP требует dynamic rendering: Next.js применяет nonce к
+// инлайн-скриптам (RSC flight data, гидрация) во время server-side рендеринга
+// на основе CSP header из middleware. Static-страницы генерируются в build
+// time без nonce и были бы заблокированы браузером.
+// См. node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md
+export const dynamic = "force-dynamic";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "cyrillic"],
@@ -16,12 +23,15 @@ export const metadata: Metadata = {
   title: "LEDLight — Производство светодиодных светильников в РФ",
   description:
     "Собственное производство LED-светильников для бизнеса. Офисные, промышленные, уличные и линейные светильники. Гарантия до 5 лет. Доставка по всей РФ.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  ),
   openGraph: {
     title: "LEDLight — Производство светодиодных светильников в РФ",
     description:
       "Собственное производство LED-светильников для бизнеса. Офисные, промышленные, уличные и линейные светильники. Гарантия до 5 лет.",
-    images: ["/og-image.jpg"],
+    // og:image* генерируется автоматически из src/app/opengraph-image.tsx
+    // (Next.js metadata file convention → ImageResponse → PNG 1200×630).
     locale: "ru_RU",
     type: "website",
   },
@@ -30,7 +40,8 @@ export const metadata: Metadata = {
     title: "LEDLight — Производство светодиодных светильников в РФ",
     description:
       "Собственное производство LED-светильников для бизнеса. Гарантия до 5 лет. Доставка по всей РФ.",
-    images: ["/og-image.jpg"],
+    // twitter:image не задаём явно: при отсутствии twitter-image.* Next.js
+    // использует opengraph-image, а Twitter сам берёт og:image как fallback.
   },
   icons: {
     icon: "/favicon.ico",

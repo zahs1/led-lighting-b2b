@@ -14,11 +14,8 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
-          {
-            key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://api.resend.com https://*.bitrix24.ru; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
-          },
+          // Content-Security-Policy устанавливается в src/middleware.ts
+          // (nonce-based, per-request). Не дублируем здесь.
         ],
       },
     ];

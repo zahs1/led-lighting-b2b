@@ -75,15 +75,15 @@ npm run start
 Все интеграции **опциональны**. Без них проект работает в демо-режиме
 (формы принимаются и показывают успех, но никуда не отправляются).
 
-| Переменная | Назначение | Обязательно |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | canonical URL, sitemap, OG | нет |
-| `NEXT_PUBLIC_COMPANY_PHONE` | телефон в шапке/футере | нет |
-| `NEXT_PUBLIC_COMPANY_EMAIL` | email в шапке/футере | нет |
-| `NEXT_PUBLIC_COMPANY_TELEGRAM` | ссылка на Telegram | нет |
-| `RESEND_API_KEY` + `MAIL_FROM` + `MAIL_TO` | email-уведомления о заявках | нет |
-| `BITRIX24_WEBHOOK_URL` | создание лидов в Bitrix24 | нет |
-| `BLOB_READ_WRITE_TOKEN` | хранение загруженных файлов | нет |
+| Переменная                                 | Назначение                  | Обязательно |
+| ------------------------------------------ | --------------------------- | ----------- |
+| `NEXT_PUBLIC_SITE_URL`                     | canonical URL, sitemap, OG  | нет         |
+| `NEXT_PUBLIC_COMPANY_PHONE`                | телефон в шапке/футере      | нет         |
+| `NEXT_PUBLIC_COMPANY_EMAIL`                | email в шапке/футере        | нет         |
+| `NEXT_PUBLIC_COMPANY_TELEGRAM`             | ссылка на Telegram          | нет         |
+| `RESEND_API_KEY` + `MAIL_FROM` + `MAIL_TO` | email-уведомления о заявках | нет         |
+| `BITRIX24_WEBHOOK_URL`                     | создание лидов в Bitrix24   | нет         |
+| `BLOB_READ_WRITE_TOKEN`                    | хранение загруженных файлов | нет         |
 
 ## Подключение интеграций (production)
 
@@ -104,7 +104,72 @@ npm run start
 Проект заточен под **Vercel**: импортируйте репозиторий, задайте переменные
 окружения, деплой произойдёт автоматически.
 
-Перед релизом добавьте `public/og-image.jpg` (1200×630) для превью ссылок.
+OG-превью ссылок генерируется динамически через `src/app/opengraph-image.tsx`
+(Next.js metadata file convention → `ImageResponse` → PNG 1200×630).
+Ручной `public/og-image.jpg` **не нужен** — тёмная тема + amber-акцент +
+бренд/телефон берутся из `src/lib/site-config.ts`.
+
+## Production deployment checklist
+
+Пошаговый чеклист для боевого B2B-деплоя. Без пунктов, отмеченных «обязательно»,
+часть функций молча откатывается в демо-режим (заявки принимаются, но никуда
+не уходят).
+
+1. **Resend (email-уведомления о заявках) — обязательно**
+   - Зарегистрироваться на [resend.com](https://resend.com).
+   - Верифицировать домен отправителя: добавить DNS-записи **SPF + DKIM**
+     (раздел Domains → Add domain → скопировать TXT/CNAME в DNS-зону домена).
+   - `MAIL_FROM` вида `LEDLight <info@yourdomain.ru>` — **с верифицированного
+     домена**, не `onboarding@resend.dev` (письма с onboarding-домена
+     отправляются только на адрес владельца аккаунта).
+   - `RESEND_API_KEY` — API-ключ из Resend Dashboard.
+   - `MAIL_TO` — ящик, куда будут приходить уведомления о заявках.
+
+2. **Vercel Blob (загрузка ТЗ/фото из форм) — опционально, рекомендуется**
+   - Vercel Dashboard → проект → вкладка **Storage** → **Blob** →
+     **Create Blob Store**.
+   - Привязать Store к проекту, скопировать `BLOB_READ_WRITE_TOKEN` в env.
+   - Без токена файлы не сохраняются, но заявка принимается (graceful-fallback).
+
+3. **Upstash Redis (строгий прод-rate-limit) — опционально, рекомендуется**
+   - Создать БД на [upstash.com](https://upstash.com) (Redis), регион рядом с
+     Vercel-деплоем.
+   - Скопировать `UPSTASH_REDIS_REST_URL` и `UPSTASH_REDIS_REST_TOKEN` в env
+     (обе переменные одновременно).
+   - Без них используется in-memory fallback — на serverless каждый инстанс
+     функции считает лимит отдельно (нестрого).
+
+4. **NEXT_PUBLIC_SITE_URL = боевой домен**
+   - `https://yourdomain.ru` (с протоколом, без слэша в конце).
+   - Используется в `metadataBase`, `sitemap.ts`, OG-тегах, JSON-LD.
+   - Обязательно для production: иначе canonical/OG-ссылки указывают на
+     `localhost:3000`.
+
+5. **Bitrix24 webhook (CRM) — опционально**
+   - В портале Bitrix24: «Разработчикам → Другое → Входящий вебхук».
+   - Дать права на `crm.lead.add`.
+   - URL вставить в `BITRIX24_WEBHOOK_URL`.
+   - Без него лиды не создаются в CRM (но идут на почту через Resend).
+
+6. **Env → Vercel Project Settings → Environment Variables**
+   - Внести ВСЕ переменные из `.env.example` для окружения **Production**
+     (и при необходимости Preview/Development).
+   - `NEXT_PUBLIC_*` применяются после пересборки; секретные (RESEND__,
+     BLOB__, UPSTASH__, BITRIX24__) — сразу после redeploy функции.
+
+7. **После деплоя — smoke-тесты**
+   - **CSP-заголовки**: открыть DevTools → Network → главный документ →
+     проверить `Content-Security-Policy` (нет `unsafe-inline` на скрипты,
+     домены Resend/Blob/Upstash в allowlist при необходимости).
+   - **POST без Origin → 403**: `curl -X POST <site>/api/lead -H 'Content-Type: application/json' -d '{}'`
+     должен вернуть 403 (защита от CSRF по Origin/Referer).
+   - **Форма → письмо**: отправить реальную заявку через форму на сайте,
+     убедиться, что письмо дошло до `MAIL_TO` (проверить спам).
+   - **OG-превью**: проверить через
+     [opengraph.xyz](https://www.opengraph.xyz/) или
+     [Meta Sharing Debugger](https://developers.facebook.com/tools/debug/) —
+     должна подтянуться динамическая картинка 1200×630 (`/opengraph-image`).
+   - **Rate-limit**: отправить >N заявок подряд → ожидать 429.
 
 ## Лицензия
 
