@@ -73,7 +73,7 @@ export default function HeroSection() {
             <div className="hidden w-full max-w-xl flex-1 md:block">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/50">
                 <Image
-                  src="https://images.unsplash.com/photo-1565636192335-b228011032a4?w=800&q=85"
+                  src="/images/hero.jpg"
                   alt="Светодиодные светильники в офисе"
                   fill
                   className="object-cover"

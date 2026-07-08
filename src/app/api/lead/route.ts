@@ -12,6 +12,7 @@ import {
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { uploadFile } from "@/lib/file-upload";
 import { sendToBitrix24 } from "@/lib/bitrix24";
+import { saveLeadLocally } from "@/lib/local-leads";
 
 type FormType = (typeof FORM_TYPES)[number];
 
@@ -162,8 +163,15 @@ export async function POST(request: NextRequest) {
     !!process.env.MAIL_TO;
   const anyIntegration = hasBitrix || hasResend;
 
-  // Демо-режим: внешних интеграций нет — форма корректно отработала
+  // Демо-режим: внешних интеграций нет — сохраняем заявку локально,
+  // чтобы её можно было увидеть в uploads/leads.json
   if (!anyIntegration) {
+    await saveLeadLocally({
+      formType,
+      fields: parsed,
+      modelName: modelValue,
+      fileUrl,
+    });
     return NextResponse.json({ success: true });
   }
 

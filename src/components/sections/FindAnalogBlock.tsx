@@ -175,7 +175,7 @@ export default function FindAnalogBlock() {
             </FadeIn>
             <div className="relative hidden h-56 w-56 shrink-0 overflow-hidden rounded-2xl border border-border md:block">
               <Image
-                src="https://images.unsplash.com/photo-1565814636199-ae8133055c1c?w=400&q=80"
+                src="/images/find-analog.jpg"
                 alt="Подбор аналога светильника"
                 fill
                 sizes="224px"
