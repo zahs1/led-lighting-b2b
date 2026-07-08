@@ -53,7 +53,7 @@ export default function FindAnalogBlock() {
                 Пришлите фото, артикул или описание существующего светильника —
                 мы подберём аналог из ассортимента или разработаем под заказ.
               </p>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
                 <Honeypot register={register} name="website_url" />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>

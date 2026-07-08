@@ -1,12 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Middleware генерирует per-request nonce и устанавливает Content-Security-Policy.
+ * Proxy генерирует per-request nonce и устанавливает Content-Security-Policy.
  *
  * Next.js (App Router) парсит 'nonce-<value>' из CSP header во время
  * server-side рендеринга и автоматически применяет nonce к своим инлайн-скриптам
  * (React/Next runtime, RSC flight data, гидрация) и инлайн-стилям. Поэтому
- * 'unsafe-inline' для скриптов больше не нужен.
+ * 'unsafe-inline' для скриптов и стилей в production больше не нужен.
  *
  * CSP ставится в два места:
  *  - request headers (через NextResponse.next({ request: { headers } })) —
@@ -15,25 +15,27 @@ import { NextResponse, type NextRequest } from "next/server";
  *
  * В dev к script-src добавляется 'unsafe-eval', так как React использует eval
  * для отладочной информации (рекомендация из docs Next.js). В production
- * 'unsafe-eval' отсутствует.
+ * 'unsafe-eval' отсутствует. Аналогично style-src в dev использует
+ * 'unsafe-inline', а в production — 'nonce-<nonce>' (Next.js применяет nonce
+ * к инлайн-<style> во время SSR).
  *
  * ВАЖНО: nonce применяется только при dynamic rendering. Static-страницы
- * генерируются в build time без nonce, поэтому в src/app/layout.tsx выставлен
- * `export const dynamic = 'force-dynamic'`. См. docs:
- * node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md
+ * генерируются в build time без nonce, поэтому в src/app/layout.tsx и
+ * src/app/global-error.tsx выставлен `export const dynamic = 'force-dynamic'`.
+ * См. docs: node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md
  *
- * Примечание: в Next.js 16 файл `middleware.ts` и функция `middleware`
- * депрецированы в пользу `proxy.ts` / функции `proxy`. Логика идентична;
- * миграция — следующий шаг (см. version-16.md, codemod middleware-to-proxy).
+ * Next.js 16: файл `middleware.ts` и функция `middleware` депрекированы в пользу
+ * `proxy.ts` / функции `proxy` (логика идентична, runtime — nodejs).
+ * См. node_modules/next/dist/docs/01-app/02-guides/upgrading/version-16.md
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const isDev = process.env.NODE_ENV === "development";
 
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ""};
-    style-src 'self' 'unsafe-inline';
+    style-src 'self' ${isDev ? "'unsafe-inline'" : `'nonce-${nonce}'`};
     img-src 'self' data:;
     font-src 'self' data:;
     connect-src 'self' https://api.resend.com https://*.bitrix24.ru;
@@ -69,7 +71,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Применять middleware ко всем путям, кроме:
+     * Применять proxy ко всем путям, кроме:
      * - api (API routes)
      * - _next/static (статические файлы)
      * - _next/image (image optimization)

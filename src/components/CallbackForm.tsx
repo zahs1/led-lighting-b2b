@@ -28,7 +28,7 @@ export default function CallbackForm({ onSuccess }: CallbackFormProps) {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
       <Honeypot register={register} name="website_url" />
       <div>
         <label className="mb-2 block text-sm font-medium text-foreground">

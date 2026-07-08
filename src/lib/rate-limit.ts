@@ -17,7 +17,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-export const RATE_LIMIT_MAX = 5;
+export const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX) || 5;
 export const RATE_LIMIT_WINDOW_MS = 60_000;
 
 const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
