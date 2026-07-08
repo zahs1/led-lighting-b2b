@@ -3,9 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { leadFormSchema, type LeadFormType } from "@/lib/validations";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { submitLead } from "@/lib/submit-lead";
+import Honeypot from "@/components/Honeypot";
+import { useLeadSubmit } from "@/hooks/useLeadSubmit";
 
 interface LeadFormProps {
   onSuccess?: () => void;
@@ -13,8 +13,6 @@ interface LeadFormProps {
 }
 
 export default function LeadForm({ onSuccess, modelName }: LeadFormProps) {
-  const [error, setError] = useState("");
-
   const {
     register,
     handleSubmit,
@@ -24,38 +22,16 @@ export default function LeadForm({ onSuccess, modelName }: LeadFormProps) {
     resolver: zodResolver(leadFormSchema),
   });
 
-  const onSubmit = async (data: LeadFormType) => {
-    setError("");
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value) formData.append(key, String(value));
-    });
-    if (modelName) formData.append("modelName", modelName);
-    formData.append("formType", "cp");
-
-    const result = await submitLead(formData);
-    if (result.ok) {
-      onSuccess?.();
-      return;
-    }
-    if (result.fieldErrors) {
-      for (const [field, msgs] of Object.entries(result.fieldErrors)) {
-        setFieldError(field as keyof LeadFormType, { message: msgs[0] });
-      }
-    }
-    if (result.error) setError(result.error);
-  };
+  const { onSubmit, state } = useLeadSubmit<LeadFormType>({
+    formType: "cp",
+    setError: setFieldError,
+    extras: { modelName },
+    onSuccess,
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <input
-        type="text"
-        name="website_url"
-        tabIndex={-1}
-        autoComplete="off"
-        className="absolute -left-[9999px]"
-        aria-hidden="true"
-      />
+      <Honeypot register={register} name="website_url" />
       {modelName && (
         <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted">
           Модель:{" "}
@@ -124,7 +100,9 @@ export default function LeadForm({ onSuccess, modelName }: LeadFormProps) {
           className="input-field resize-none"
         />
       </div>
-      {error && <p className="text-center text-sm text-red-400">{error}</p>}
+      {state.error && (
+        <p className="text-center text-sm text-red-400">{state.error}</p>
+      )}
       <button
         type="submit"
         disabled={isSubmitting}

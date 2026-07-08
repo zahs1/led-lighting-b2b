@@ -3,17 +3,15 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { callbackFormSchema, type CallbackFormType } from "@/lib/validations";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { submitLead } from "@/lib/submit-lead";
+import Honeypot from "@/components/Honeypot";
+import { useLeadSubmit } from "@/hooks/useLeadSubmit";
 
 interface CallbackFormProps {
   onSuccess?: () => void;
 }
 
 export default function CallbackForm({ onSuccess }: CallbackFormProps) {
-  const [error, setError] = useState("");
-
   const {
     register,
     handleSubmit,
@@ -23,37 +21,15 @@ export default function CallbackForm({ onSuccess }: CallbackFormProps) {
     resolver: zodResolver(callbackFormSchema),
   });
 
-  const onSubmit = async (data: CallbackFormType) => {
-    setError("");
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value) formData.append(key, String(value));
-    });
-    formData.append("formType", "callback");
-
-    const result = await submitLead(formData);
-    if (result.ok) {
-      onSuccess?.();
-      return;
-    }
-    if (result.fieldErrors) {
-      for (const [field, msgs] of Object.entries(result.fieldErrors)) {
-        setFieldError(field as keyof CallbackFormType, { message: msgs[0] });
-      }
-    }
-    if (result.error) setError(result.error);
-  };
+  const { onSubmit, state } = useLeadSubmit<CallbackFormType>({
+    formType: "callback",
+    setError: setFieldError,
+    onSuccess,
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <input
-        type="text"
-        name="website_url"
-        tabIndex={-1}
-        autoComplete="off"
-        className="absolute -left-[9999px]"
-        aria-hidden="true"
-      />
+      <Honeypot register={register} name="website_url" />
       <div>
         <label className="mb-2 block text-sm font-medium text-foreground">
           Ваше имя *
@@ -81,7 +57,9 @@ export default function CallbackForm({ onSuccess }: CallbackFormProps) {
           <p className="mt-1.5 text-sm text-red-400">{errors.phone.message}</p>
         )}
       </div>
-      {error && <p className="text-center text-sm text-red-400">{error}</p>}
+      {state.error && (
+        <p className="text-center text-sm text-red-400">{state.error}</p>
+      )}
       <button
         type="submit"
         disabled={isSubmitting}

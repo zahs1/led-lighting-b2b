@@ -1,8 +1,12 @@
-export async function sendToBitrix24(data: Record<string, unknown>): Promise<boolean> {
+export async function sendToBitrix24(
+  data: Record<string, unknown>,
+): Promise<boolean> {
   const webhookUrl = process.env.BITRIX24_WEBHOOK_URL;
 
   if (!webhookUrl) {
-    console.warn("BITRIX24_WEBHOOK_URL not configured, skipping Bitrix24 integration");
+    console.warn(
+      "BITRIX24_WEBHOOK_URL not configured, skipping Bitrix24 integration",
+    );
     return false;
   }
 
@@ -14,13 +18,21 @@ export async function sendToBitrix24(data: Record<string, unknown>): Promise<boo
     });
 
     if (!response.ok) {
-      console.error("Bitrix24 API error:", response.status, await response.text());
+      // Не логируем тело ответа — оно может содержать PII лида.
+      console.error(
+        "Bitrix24 API error:",
+        response.status,
+        response.statusText,
+      );
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error("Bitrix24 send error:", error);
+    console.error(
+      "Bitrix24 send error:",
+      error instanceof Error ? error.message : "unknown",
+    );
     return false;
   }
 }

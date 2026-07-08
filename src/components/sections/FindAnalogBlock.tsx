@@ -4,15 +4,15 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { analogFormSchema, type AnalogFormType } from "@/lib/validations";
-import { Search, Loader2, CheckCircle, Upload } from "lucide-react";
+import { Search, Loader2, Upload } from "lucide-react";
 import Image from "next/image";
 import FadeIn from "@/components/FadeIn";
-import { submitLead } from "@/lib/submit-lead";
+import Honeypot from "@/components/Honeypot";
+import SuccessMessage from "@/components/SuccessMessage";
+import { useLeadSubmit } from "@/hooks/useLeadSubmit";
 
 export default function FindAnalogBlock() {
   const [file, setFile] = useState<File | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -22,41 +22,18 @@ export default function FindAnalogBlock() {
     formState: { errors, isSubmitting },
   } = useForm<AnalogFormType>({ resolver: zodResolver(analogFormSchema) });
 
-  const onSubmit = async (data: AnalogFormType) => {
-    setError("");
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value) formData.append(key, String(value));
-    });
-    if (file) formData.append("file", file);
-    formData.append("formType", "analog");
+  const { onSubmit, state } = useLeadSubmit<AnalogFormType>({
+    formType: "analog",
+    setError: setFieldError,
+    extras: { file },
+  });
 
-    const result = await submitLead(formData);
-    if (result.ok) {
-      setSubmitted(true);
-      return;
-    }
-    if (result.fieldErrors) {
-      for (const [field, msgs] of Object.entries(result.fieldErrors)) {
-        setFieldError(field as keyof AnalogFormType, { message: msgs[0] });
-      }
-    }
-    if (result.error) setError(result.error);
-  };
-
-  if (submitted) {
+  if (state.status === "success") {
     return (
-      <div className="py-24 md:py-32">
-        <div className="container-custom mx-auto max-w-lg text-center">
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10">
-            <CheckCircle size={32} className="text-emerald-400" />
-          </div>
-          <h3 className="mb-2 text-2xl font-bold text-foreground">
-            Заявка принята!
-          </h3>
-          <p className="text-muted">Мы найдём аналог и пришлём предложение.</p>
-        </div>
-      </div>
+      <SuccessMessage
+        title="Заявка принята!"
+        text="Мы найдём аналог и пришлём предложение."
+      />
     );
   }
 
@@ -77,14 +54,7 @@ export default function FindAnalogBlock() {
                 мы подберём аналог из ассортимента или разработаем под заказ.
               </p>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <input
-                  type="text"
-                  name="website_url"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  className="absolute -left-[9999px]"
-                  aria-hidden="true"
-                />
+                <Honeypot register={register} name="website_url" />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <input
@@ -93,7 +63,7 @@ export default function FindAnalogBlock() {
                       className="input-field"
                     />
                     {errors.name && (
-                      <p className="mt-1.5 text-xs text-red-400">
+                      <p className="mt-1.5 text-sm text-red-400">
                         {errors.name.message}
                       </p>
                     )}
@@ -106,7 +76,7 @@ export default function FindAnalogBlock() {
                       className="input-field"
                     />
                     {errors.phone && (
-                      <p className="mt-1.5 text-xs text-red-400">
+                      <p className="mt-1.5 text-sm text-red-400">
                         {errors.phone.message}
                       </p>
                     )}
@@ -121,7 +91,7 @@ export default function FindAnalogBlock() {
                       className="input-field"
                     />
                     {errors.email && (
-                      <p className="mt-1.5 text-xs text-red-400">
+                      <p className="mt-1.5 text-sm text-red-400">
                         {errors.email.message}
                       </p>
                     )}
@@ -155,7 +125,9 @@ export default function FindAnalogBlock() {
                     />
                   </label>
                 </div>
-                {error && <p className="text-xs text-red-400">{error}</p>}
+                {state.error && (
+                  <p className="text-sm text-red-400">{state.error}</p>
+                )}
                 <button
                   type="submit"
                   disabled={isSubmitting}
