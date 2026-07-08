@@ -3,15 +3,13 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wholesaleFormSchema, type WholesaleFormType } from "@/lib/validations";
-import { useState } from "react";
-import { Download, Loader2, CheckCircle } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
-import { submitLead } from "@/lib/submit-lead";
+import Honeypot from "@/components/Honeypot";
+import SuccessMessage from "@/components/SuccessMessage";
+import { useLeadSubmit } from "@/hooks/useLeadSubmit";
 
 export default function WholesalePriceForm() {
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
-
   const {
     register,
     handleSubmit,
@@ -21,40 +19,17 @@ export default function WholesalePriceForm() {
     resolver: zodResolver(wholesaleFormSchema),
   });
 
-  const onSubmit = async (data: WholesaleFormType) => {
-    setError("");
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value) formData.append(key, String(value));
-    });
-    formData.append("formType", "wholesale");
+  const { onSubmit, state } = useLeadSubmit<WholesaleFormType>({
+    formType: "wholesale",
+    setError: setFieldError,
+  });
 
-    const result = await submitLead(formData);
-    if (result.ok) {
-      setSubmitted(true);
-      return;
-    }
-    if (result.fieldErrors) {
-      for (const [field, msgs] of Object.entries(result.fieldErrors)) {
-        setFieldError(field as keyof WholesaleFormType, { message: msgs[0] });
-      }
-    }
-    if (result.error) setError(result.error);
-  };
-
-  if (submitted) {
+  if (state.status === "success") {
     return (
-      <div className="py-24 md:py-32">
-        <div className="container-custom mx-auto max-w-lg text-center">
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10">
-            <CheckCircle size={32} className="text-emerald-400" />
-          </div>
-          <h3 className="mb-2 text-2xl font-bold text-foreground">
-            Прайс-лист отправлен!
-          </h3>
-          <p className="text-muted">Проверьте вашу почту.</p>
-        </div>
-      </div>
+      <SuccessMessage
+        title="Заявка на прайс-лист отправлена!"
+        text="Наш менеджер свяжется с вами и пришлёт прайс."
+      />
     );
   }
 
@@ -82,14 +57,7 @@ export default function WholesalePriceForm() {
               onSubmit={handleSubmit(onSubmit)}
               className="card-base p-8 shadow-xl shadow-black/20 md:p-10"
             >
-              <input
-                type="text"
-                name="website_url"
-                tabIndex={-1}
-                autoComplete="off"
-                className="absolute -left-[9999px]"
-                aria-hidden="true"
-              />
+              <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-foreground">
@@ -101,7 +69,7 @@ export default function WholesalePriceForm() {
                     placeholder="Иван Петров"
                   />
                   {errors.name && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-sm text-red-400">
                       {errors.name.message}
                     </p>
                   )}
@@ -117,7 +85,7 @@ export default function WholesalePriceForm() {
                     placeholder="+7 (495) 123-45-67"
                   />
                   {errors.phone && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-sm text-red-400">
                       {errors.phone.message}
                     </p>
                   )}
@@ -135,7 +103,7 @@ export default function WholesalePriceForm() {
                     placeholder="ivan@company.ru"
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-sm text-red-400">
                       {errors.email.message}
                     </p>
                   )}
@@ -150,7 +118,7 @@ export default function WholesalePriceForm() {
                     placeholder="ООО «СтройГрупп»"
                   />
                   {errors.company && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-sm text-red-400">
                       {errors.company.message}
                     </p>
                   )}
@@ -173,13 +141,15 @@ export default function WholesalePriceForm() {
                   <option value="private">Частный клиент</option>
                 </select>
                 {errors.clientType && (
-                  <p className="mt-1.5 text-xs text-red-400">
+                  <p className="mt-1.5 text-sm text-red-400">
                     {errors.clientType.message}
                   </p>
                 )}
               </div>
-              {error && (
-                <p className="mb-4 text-center text-xs text-red-400">{error}</p>
+              {state.error && (
+                <p className="mb-4 text-center text-sm text-red-400">
+                  {state.error}
+                </p>
               )}
               <button
                 type="submit"
