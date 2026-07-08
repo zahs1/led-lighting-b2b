@@ -23,8 +23,18 @@ export interface StoredLead {
 }
 
 export async function saveLeadLocally(
-  lead: Omit<StoredLead, "id" | "receivedAt">
+  lead: Omit<StoredLead, "id" | "receivedAt">,
 ): Promise<void> {
+  // Defense in depth: в проде FS serverless эфемерна — запись молча теряет
+  // данные. Основная защита (503) в route.ts; этот guard ловит случайные вызовы
+  // из других мест и громко сигнализирует, вместо тихой потери заявки.
+  if (process.env.NODE_ENV === "production") {
+    console.error(
+      "[local-leads] saveLeadLocally called in production — refusing to write to ephemeral filesystem",
+    );
+    return;
+  }
+
   try {
     await mkdir(LEADS_DIR, { recursive: true });
 

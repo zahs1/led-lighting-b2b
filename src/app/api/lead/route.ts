@@ -58,26 +58,92 @@ function isFormType(value: string): value is FormType {
   return (FORM_TYPES as readonly string[]).includes(value);
 }
 
+/**
+ * Валидный ключ Resend: `re_` + 20+ латинских букв/цифр.
+ * Плейсхолдеры вроде `re_xxxxxxxxxxxx` НЕ считаются валидными → demo-режим.
+ */
+function isValidResendKey(k: string | undefined): boolean {
+  return typeof k === "string" && /^re_[A-Za-z0-9]{20,}$/.test(k);
+}
+
+/**
+ * Валидный webhook Bitrix24: https-URL (настоящий эндпоинт, не плейсхолдер).
+ */
+function isValidBitrixWebhookUrl(u: string | undefined): boolean {
+  if (typeof u !== "string" || u.length === 0) return false;
+  try {
+    const url = new URL(u);
+    return url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   // 1. Ограничение размера тела запроса
   const contentLength = Number(request.headers.get("content-length") ?? 0);
   if (contentLength > MAX_BODY_BYTES) {
     return NextResponse.json(
       { error: "Размер запроса превышает лимит" },
-      { status: 413 }
+      { status: 413 },
     );
   }
 
   // 2. Rate limit
   const ip = getClientIp(request);
-  const rateCheck = checkRateLimit(ip);
+  const rateCheck = await checkRateLimit(ip);
   if (!rateCheck.allowed) {
     return NextResponse.json(
       { error: "Слишком много запросов. Попробуйте позже." },
       {
         status: 429,
         headers: { "Retry-After": String(rateCheck.retryAfter) },
-      }
+      },
+    );
+  }
+
+  // Same-origin check (защита от CSRF — fail-closed).
+  // Браузер всегда шлёт Origin (Referer — фолбэк) при POST; если ни того, ни
+  // другого нет → 403. Сравниваем scheme + host (без порта) с ожидаемым хостом.
+  const host = request.headers.get("host");
+  const originHeader =
+    request.headers.get("origin") || request.headers.get("referer");
+
+  if (!originHeader) {
+    return NextResponse.json(
+      { error: "Запрос отклонён системой безопасности" },
+      { status: 403 },
+    );
+  }
+
+  let originUrl: URL;
+  try {
+    originUrl = new URL(originHeader);
+  } catch {
+    return NextResponse.json(
+      { error: "Запрос отклонён системой безопасности" },
+      { status: 403 },
+    );
+  }
+
+  // Ожидаемый scheme: учитываем x-forwarded-proto (Vercel/прокси), иначе nextUrl.
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim();
+  const expectedScheme = forwardedProto
+    ? forwardedProto
+    : request.nextUrl.protocol.replace(":", "");
+  const expectedHost = host?.split(":")[0] ?? "";
+
+  if (
+    !expectedHost ||
+    originUrl.protocol.replace(":", "") !== expectedScheme ||
+    originUrl.hostname !== expectedHost
+  ) {
+    return NextResponse.json(
+      { error: "Запрос отклонён системой безопасности" },
+      { status: 403 },
     );
   }
 
@@ -88,7 +154,7 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: "Некорректные данные формы" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -97,7 +163,7 @@ export async function POST(request: NextRequest) {
   if (!isFormType(formTypeRaw)) {
     return NextResponse.json(
       { error: "Некорректный тип формы" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   const formType: FormType = formTypeRaw;
@@ -129,7 +195,7 @@ export async function POST(request: NextRequest) {
       }
       return NextResponse.json(
         { error: "Проверьте введённые данные", fieldErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
     throw err;
@@ -149,23 +215,27 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // 8. Интеграции
-  const bitrixData = buildBitrixPayload(parsed, formType, modelValue, fileUrl);
-  const [bitrixRes, emailRes] = await Promise.allSettled([
-    sendToBitrix24(bitrixData),
-    sendEmailNotification(parsed, formType, modelValue, fileUrl),
-  ]);
-
-  const hasBitrix = !!process.env.BITRIX24_WEBHOOK_URL;
+  // 8. Интеграции — валидность env определяем до вызова: невалидный ключ/URL
+  // (включая плейсхолдеры) → считаем интеграцию ненастроенной (demo-режим),
+  // чтобы не пытаться отправить и не получать 502.
+  const hasBitrix = isValidBitrixWebhookUrl(process.env.BITRIX24_WEBHOOK_URL);
   const hasResend =
-    !!process.env.RESEND_API_KEY &&
+    isValidResendKey(process.env.RESEND_API_KEY) &&
     !!process.env.MAIL_FROM &&
     !!process.env.MAIL_TO;
   const anyIntegration = hasBitrix || hasResend;
 
-  // Демо-режим: внешних интеграций нет — сохраняем заявку локально,
-  // чтобы её можно было увидеть в uploads/leads.json
+  // Нет валидных интеграций: в проде — fail-loudly (503), в dev — локально.
   if (!anyIntegration) {
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        {
+          error:
+            "Сервис приёма заявок временно недоступен. Свяжитесь по телефону.",
+        },
+        { status: 503 },
+      );
+    }
     await saveLeadLocally({
       formType,
       fields: parsed,
@@ -174,6 +244,14 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({ success: true });
   }
+
+  const bitrixData = buildBitrixPayload(parsed, formType, modelValue, fileUrl);
+  const [bitrixRes, emailRes] = await Promise.allSettled([
+    hasBitrix ? sendToBitrix24(bitrixData) : Promise.resolve(false as boolean),
+    hasResend
+      ? sendEmailNotification(parsed, formType, modelValue, fileUrl)
+      : Promise.resolve(false as boolean),
+  ]);
 
   const bitrixOk = bitrixRes.status === "fulfilled" && bitrixRes.value === true;
   const emailOk = emailRes.status === "fulfilled" && emailRes.value === true;
@@ -189,7 +267,7 @@ export async function POST(request: NextRequest) {
         error:
           "Не удалось отправить заявку. Попробуйте позже или свяжитесь по телефону.",
       },
-      { status: 502 }
+      { status: 502 },
     );
   }
 
@@ -200,7 +278,7 @@ function buildBitrixPayload(
   parsed: Record<string, string>,
   formType: FormType,
   modelName: string | null,
-  fileUrl: string | null
+  fileUrl: string | null,
 ) {
   const comments: string[] = [];
   for (const [key, label] of Object.entries(FIELD_LABELS)) {
@@ -226,7 +304,7 @@ async function sendEmailNotification(
   data: Record<string, string>,
   formType: FormType,
   modelName: string | null,
-  fileUrl: string | null
+  fileUrl: string | null,
 ): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.MAIL_FROM;
@@ -241,7 +319,7 @@ async function sendEmailNotification(
   for (const [key, label] of Object.entries(FIELD_LABELS)) {
     if (data[key]) {
       rows.push(
-        `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(data[key])}</p>`
+        `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(data[key])}</p>`,
       );
     }
   }
@@ -251,8 +329,8 @@ async function sendEmailNotification(
   if (fileUrl) {
     rows.push(
       `<p><strong>Файл:</strong> <a href="${escapeHtml(fileUrl)}">${escapeHtml(
-        fileUrl
-      )}</a></p>`
+        fileUrl,
+      )}</a></p>`,
     );
   }
 
@@ -269,13 +347,17 @@ async function sendEmailNotification(
         subject: `Новая заявка: ${FORM_LABELS[formType] ?? "Заявка"}`,
         html: `<h2>Новая заявка с сайта</h2>
 <p><strong>Тип формы:</strong> ${escapeHtml(
-          FORM_LABELS[formType] ?? formType
+          FORM_LABELS[formType] ?? formType,
         )}</p>${rows.join("")}`,
       }),
     });
     return res.ok;
   } catch (error) {
-    console.error("[email] send error:", error);
+    // Не логируем объект ошибки целиком — он может содержать PII лида.
+    console.error(
+      "[email] send error:",
+      error instanceof Error ? error.message : "unknown",
+    );
     return false;
   }
 }
