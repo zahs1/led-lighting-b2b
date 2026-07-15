@@ -129,7 +129,7 @@ export default function Header() {
             menuOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="border-t border-border bg-surface">
+          <div className="border-t border-border bg-navy-900">
             <div className="container-custom flex flex-col gap-2 py-4">
               {navLinks.map((link) => (
                 <a

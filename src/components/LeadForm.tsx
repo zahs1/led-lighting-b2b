@@ -45,7 +45,7 @@ export default function LeadForm({ onSuccess, modelName }: LeadFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
       <Honeypot register={register} name="website_url" />
       {modelName && (
-        <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted">
+        <p className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-muted">
           Модель:{" "}
           <span className="font-medium text-foreground">{modelName}</span>
         </p>
