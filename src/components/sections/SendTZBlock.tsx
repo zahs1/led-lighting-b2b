@@ -149,7 +149,7 @@ export default function SendTZBlock() {
                 />
               </div>
               <div className="mb-6">
-                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-5 py-4 transition-all hover:border-copper-500/40 hover:bg-card-hover">
+                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-card px-5 py-4 transition-all hover:border-copper-500/40 hover:bg-card-hover">
                       <Upload size={18} className="text-copper-400" />
                   <span className="text-sm text-muted">
                     {file

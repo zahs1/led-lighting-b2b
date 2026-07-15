@@ -25,7 +25,7 @@ const points = [
 
 export default function WhyChooseUs() {
   return (
-    <div className="py-24 md:py-32 bg-surface">
+    <div className="py-24 md:py-32 bg-navy-900">
       <div className="container-custom">
         <FadeIn>
           <div className="mb-12 max-w-2xl">

@@ -13,7 +13,10 @@ export default function HeroSection() {
 
   return (
     <>
-      <div className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-gradient-to-b from-navy-900 via-navy-900 to-background">
+        {/* ponytail: CSS-only copper radial glow */}
+        <div className="pointer-events-none absolute -left-48 top-0 h-[600px] w-[600px] rounded-full bg-copper-500/5 blur-[120px]" aria-hidden="true" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-[400px] w-[400px] rounded-full bg-copper-500/3 blur-[100px]" aria-hidden="true" />
         <div className="container-custom relative">
           <div className="grid grid-cols-1 items-center gap-16 pb-24 pt-16 md:pb-32 md:pt-24 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
             <div className="max-w-2xl">
@@ -99,7 +102,7 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <Modal
         isOpen={cpModal}

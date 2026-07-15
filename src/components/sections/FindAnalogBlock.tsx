@@ -114,7 +114,7 @@ export default function FindAnalogBlock() {
                     placeholder="Количество (шт)"
                     className="input-field"
                   />
-                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-5 py-3 transition-all hover:border-copper-500/40 hover:bg-card-hover">
+                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-card px-5 py-3 transition-all hover:border-copper-500/40 hover:bg-card-hover">
                       <Upload size={18} className="text-copper-400" />
                     <span className="truncate text-sm text-muted">
                       {file ? file.name : "Фото аналога"}
