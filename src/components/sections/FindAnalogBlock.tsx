@@ -40,10 +40,10 @@ export default function FindAnalogBlock() {
   return (
     <div className="py-24 md:py-32">
       <div className="container-custom">
-        <div className="card-base mx-auto max-w-4xl p-8 shadow-xl shadow-black/20 md:p-12">
+        <div className="card-base mx-auto max-w-4xl p-8 shadow-sm md:p-12">
           <div className="flex flex-col items-start gap-8 md:flex-row">
             <FadeIn className="flex-1">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-border text-copper-400">
                 <Search size={24} />
               </div>
               <h2 className="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
@@ -53,7 +53,11 @@ export default function FindAnalogBlock() {
                 Пришлите фото, артикул или описание существующего светильника —
                 мы подберём аналог из ассортимента или разработаем под заказ.
               </p>
-              <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+                className="space-y-4"
+              >
                 <Honeypot register={register} name="website_url" />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
@@ -110,8 +114,8 @@ export default function FindAnalogBlock() {
                     placeholder="Количество (шт)"
                     className="input-field"
                   />
-                  <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-5 py-3 transition-all hover:border-amber-500/40 hover:bg-card-hover">
-                    <Upload size={18} className="text-amber-400" />
+                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-5 py-3 transition-all hover:border-copper-500/40 hover:bg-card-hover">
+                      <Upload size={18} className="text-copper-400" />
                     <span className="truncate text-sm text-muted">
                       {file ? file.name : "Фото аналога"}
                     </span>
@@ -145,7 +149,7 @@ export default function FindAnalogBlock() {
                 </button>
               </form>
             </FadeIn>
-            <div className="relative hidden h-56 w-56 shrink-0 overflow-hidden rounded-2xl border border-border md:block">
+            <div className="relative hidden h-56 w-56 shrink-0 overflow-hidden rounded-lg border border-border md:block">
               <Image
                 src="/images/find-analog.jpg"
                 alt="Подбор аналога светильника"

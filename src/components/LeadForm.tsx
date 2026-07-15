@@ -5,9 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { leadFormSchema, type LeadFormType } from "@/lib/validations";
 import { Loader2 } from "lucide-react";
 import Honeypot from "@/components/Honeypot";
+import SuccessMessage from "@/components/SuccessMessage";
 import { useLeadSubmit } from "@/hooks/useLeadSubmit";
 
 interface LeadFormProps {
+  /** Обработчик закрытия — вызывается кнопкой «Закрыть» в success-состоянии. */
   onSuccess?: () => void;
   modelName?: string;
 }
@@ -26,8 +28,18 @@ export default function LeadForm({ onSuccess, modelName }: LeadFormProps) {
     formType: "cp",
     setError: setFieldError,
     extras: { modelName },
-    onSuccess,
   });
+
+  if (state.status === "success") {
+    return (
+      <SuccessMessage
+        compact
+        onClose={onSuccess}
+        title="Заявка принята"
+        text="Свяжемся в течение рабочего дня: подготовим расчёт и КП под ваш объект."
+      />
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">

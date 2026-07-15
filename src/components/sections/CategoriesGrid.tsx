@@ -25,12 +25,12 @@ export default function CategoriesGrid() {
     <div id="categories" className="py-24 md:py-32">
       <div className="container-custom">
         <FadeIn>
-          <div className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="section-header">
             <span className="eyebrow">Каталог</span>
-            <h2 className="mx-auto mt-4 mb-5 max-w-2xl text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            <h2 className="section-title">
               Категории светильников
             </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-relaxed text-muted">
+            <p className="section-subtitle">
               Широкий ассортимент LED-светильников для любых задач — от офиса до
               промышленного объекта.
             </p>
@@ -42,36 +42,35 @@ export default function CategoriesGrid() {
             <FadeIn key={cat.id} delay={idx * 80}>
               <a
                 href="#popular-models"
-                className="card-base group block overflow-hidden hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5 hover:-translate-y-1"
+                className="card-base group block overflow-hidden transition-all duration-200 hover:border-border-strong hover:shadow-sm"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-surface">
                   <Image
                     src={cat.image}
                     alt={cat.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-all duration-500 group-hover:scale-[1.04]"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-3 left-4">
-                    <span className="rounded-full border border-white/15 bg-black/40 px-3 py-1 text-xs font-semibold text-amber-300 backdrop-blur-sm">
+                  <div className="absolute bottom-3 left-3">
+                    <span className="rounded-md border border-border bg-background/90 px-2.5 py-1 font-mono text-xs font-medium text-foreground">
                       {cat.powerRange}
                     </span>
                   </div>
-                  <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/40 text-amber-400 backdrop-blur-sm">
-                    {categoryIcons[cat.slug] ?? <Lightbulb size={22} />}
+                  <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background/90 text-foreground">
+                    {categoryIcons[cat.slug] ?? <Lightbulb size={20} />}
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold text-foreground transition-colors group-hover:text-amber-400">
+                  <h3 className="mb-2 text-lg font-semibold text-foreground transition-colors group-hover:text-copper-400">
                     {cat.title}
                   </h3>
                   <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted">
                     {cat.description}
                   </p>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-400 transition-all group-hover:gap-3">
+                  <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-copper-400 transition-all group-hover:gap-3">
                     Смотреть модели
-                    <ArrowRight size={15} />
+                    <ArrowRight size={14} />
                   </span>
                 </div>
               </a>

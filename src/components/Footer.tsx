@@ -1,19 +1,27 @@
-import { Phone, Mail, MapPin, Clock, ArrowUpRight, Send, MessageCircle } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  ArrowUpRight,
+  Send,
+  MessageCircle,
+} from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer id="contacts" className="border-t border-border bg-surface">
+    <footer id="contacts" className="border-t border-border">
       <div className="container-custom py-16 md:py-20">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div>
             <div className="mb-5 flex items-center gap-2.5 text-xl font-bold">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 text-sm font-bold text-black shadow-lg shadow-amber-500/30">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-800 text-sm font-bold text-white">
                 L
               </span>
-              LED<span className="text-amber-400">Light</span>
+              <span>LED<span className="text-copper-400">Light</span></span>
             </div>
             <p className="text-sm leading-relaxed text-muted">
               Производство и поставка светодиодных светильников для бизнеса.
@@ -55,7 +63,7 @@ export default function Footer() {
                   href={siteConfig.phoneHref}
                   className="flex items-center gap-3 whitespace-nowrap text-sm text-muted transition-colors hover:text-foreground"
                 >
-                  <Phone size={15} className="shrink-0 text-amber-400" />
+                  <Phone size={15} className="shrink-0 text-copper-400" />
                   {siteConfig.phoneDisplay}
                 </a>
               </li>
@@ -64,19 +72,19 @@ export default function Footer() {
                   href={siteConfig.emailHref}
                   className="flex items-center gap-3 whitespace-nowrap text-sm text-muted transition-colors hover:text-foreground"
                 >
-                  <Mail size={15} className="shrink-0 text-amber-400" />
+                  <Mail size={15} className="shrink-0 text-copper-400" />
                   {siteConfig.email}
                 </a>
               </li>
               <li>
                 <span className="flex items-center gap-3 text-sm text-muted">
-                  <MapPin size={15} className="shrink-0 text-amber-400" />
+                  <MapPin size={15} className="shrink-0 text-copper-400" />
                   {siteConfig.address}
                 </span>
               </li>
               <li>
                 <span className="flex items-center gap-3 text-sm text-muted">
-                  <Clock size={15} className="shrink-0 text-amber-400" />
+                  <Clock size={15} className="shrink-0 text-copper-400" />
                   {siteConfig.hours}
                 </span>
               </li>
@@ -97,7 +105,7 @@ export default function Footer() {
                 href={siteConfig.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 transition-colors hover:text-amber-300"
+                className="inline-flex items-center gap-2 text-sm font-medium text-copper-400 transition-colors hover:text-copper-300"
               >
                 <MessageCircle size={15} />
                 Написать в WhatsApp
@@ -107,7 +115,7 @@ export default function Footer() {
                 href={siteConfig.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 transition-colors hover:text-amber-300"
+                className="inline-flex items-center gap-2 text-sm font-medium text-copper-400 transition-colors hover:text-copper-300"
               >
                 <Send size={15} />
                 Написать в Telegram

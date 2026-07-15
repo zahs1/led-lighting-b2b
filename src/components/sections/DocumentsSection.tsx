@@ -36,14 +36,14 @@ export default function DocumentsSection() {
     <div id="documents" className="py-24 md:py-32">
       <div className="container-custom">
         <FadeIn>
-          <div className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="section-header">
             <span className="eyebrow">Документация</span>
-            <h2 className="mx-auto mt-4 mb-5 max-w-2xl text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            <h2 className="section-title">
               Документы и гарантия
             </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-relaxed text-muted">
-              Предоставляем полный пакет документов на каждую партию. Гарантия до
-              5 лет на все светильники.
+            <p className="section-subtitle">
+              Предоставляем полный пакет документов на каждую партию. Гарантия
+              до 5 лет на все светильники.
             </p>
           </div>
         </FadeIn>
@@ -53,8 +53,8 @@ export default function DocumentsSection() {
             const Icon = item.icon;
             return (
               <FadeIn key={item.title} delay={idx * 80}>
-                <div className="card-base h-full p-6 hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5 hover:-translate-y-1">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
+                <div className="card-base h-full p-6 transition-colors hover:border-border-strong">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-border text-copper-400">
                     <Icon size={24} />
                   </div>
                   <h3 className="mb-2 text-base font-semibold text-foreground">

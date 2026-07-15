@@ -22,7 +22,7 @@ export default function RealizedProjects() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.slice(0, 6).map((project, idx) => (
             <FadeIn key={project.id} delay={idx * 60}>
-              <div className="card-base group h-full overflow-hidden hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5 hover:-translate-y-1">
+              <div className="card-base group h-full overflow-hidden transition-colors hover:border-border-strong">
                 <div className="relative aspect-[16/10] overflow-hidden bg-surface">
                   <Image
                     src={project.image}
@@ -31,8 +31,7 @@ export default function RealizedProjects() {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-xs font-medium text-amber-300 backdrop-blur-sm">
+                  <span className="absolute left-3 top-3 rounded-md border border-border bg-background/90 px-2.5 py-1 font-mono text-xs font-medium text-foreground">
                     {project.category}
                   </span>
                 </div>

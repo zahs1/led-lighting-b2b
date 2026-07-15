@@ -40,15 +40,15 @@ const partners = [
 
 export default function TestimonialsSection() {
   return (
-    <div id="testimonials" className="py-24 md:py-32">
+    <div id="testimonials" className="py-24 md:py-32 bg-surface">
       <div className="container-custom">
         <FadeIn>
-          <div className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="section-header">
             <span className="eyebrow">Отзывы</span>
-            <h2 className="mx-auto mt-4 mb-5 max-w-2xl text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            <h2 className="section-title">
               Нам доверяют
             </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-relaxed text-muted">
+            <p className="section-subtitle">
               Более 500 постоянных клиентов по всей России. Вот что говорят о
               нас.
             </p>
@@ -58,8 +58,8 @@ export default function TestimonialsSection() {
         <div className="mb-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((item, idx) => (
             <FadeIn key={item.id} delay={idx * 100}>
-              <div className="card-base flex h-full flex-col p-6 hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5">
-                <Quote size={24} className="mb-4 shrink-0 text-amber-500/40" />
+              <div className="card-base flex h-full flex-col p-6 transition-all duration-200 hover:border-border-strong hover:shadow-sm">
+                <Quote size={24} className="mb-4 shrink-0 text-copper-500/40" />
                 <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">
                   {item.text}
                 </p>
@@ -89,14 +89,14 @@ export default function TestimonialsSection() {
 
         <FadeIn delay={120}>
           <div className="mb-8 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
+            <span className="font-mono text-xs text-subtle">
               Среди наших клиентов
             </span>
           </div>
           <div className="grid grid-cols-2 items-center justify-items-center gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {partners.map((name, idx) => (
               <FadeIn key={name} delay={idx * 60}>
-                <div className="flex h-12 w-32 items-center justify-center rounded-lg border border-border bg-card px-3">
+                <div className="flex h-12 w-32 items-center justify-center rounded-lg border border-border/60 bg-card px-3">
                   <span className="text-sm font-semibold tracking-tight text-muted">
                     {name}
                   </span>

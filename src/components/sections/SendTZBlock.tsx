@@ -29,24 +29,23 @@ export default function SendTZBlock() {
   if (state.status === "success") {
     return (
       <SuccessMessage
-        title="ТЗ получено!"
-        text="Мы свяжемся с вами в ближайшее время."
+        title="ТЗ получено"
+        text="Расчёт и КП пришлём в течение 24 часов на указанные контакты."
       />
     );
   }
 
   return (
-    <div className="relative overflow-hidden py-24 md:py-32">
-      <div className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
+    <div className="relative py-24 md:py-32">
       <div className="container-custom relative">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <FadeIn>
             <div>
               <span className="eyebrow">Отправьте ТЗ</span>
-              <h2 className="mt-4 mb-5 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              <h2 className="mt-4 mb-5 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 Есть проект?
                 <br />
-                <span className="text-gradient-amber">
+                <span className="text-copper-400">
                   Пришлите техническое задание
                 </span>
               </h2>
@@ -62,7 +61,7 @@ export default function SendTZBlock() {
                   "КП с ценами и сроками за 24 часа",
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3">
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-copper-400" />
                     {item}
                   </li>
                 ))}
@@ -72,8 +71,9 @@ export default function SendTZBlock() {
 
           <FadeIn delay={100}>
             <form
-              onSubmit={handleSubmit(onSubmit)} noValidate
-              className="card-base p-8 shadow-xl shadow-black/30 md:p-10"
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate
+              className="card-base p-8 shadow-sm md:p-10"
             >
               <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -149,8 +149,8 @@ export default function SendTZBlock() {
                 />
               </div>
               <div className="mb-6">
-                <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-5 py-4 transition-all hover:border-amber-500/40 hover:bg-card-hover">
-                  <Upload size={18} className="text-amber-400" />
+                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-5 py-4 transition-all hover:border-copper-500/40 hover:bg-card-hover">
+                      <Upload size={18} className="text-copper-400" />
                   <span className="text-sm text-muted">
                     {file
                       ? file.name

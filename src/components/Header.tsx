@@ -31,10 +31,10 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 border-b ${
+        className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "border-border bg-background/80 backdrop-blur-xl"
-            : "border-transparent bg-background/60 backdrop-blur-md"
+            ? "border-b border-border/80 bg-background/85 backdrop-blur-xl"
+            : "border-transparent bg-background"
         }`}
       >
         <div className="container-custom">
@@ -44,11 +44,11 @@ export default function Header() {
               className="flex items-center gap-2.5 text-xl font-bold text-foreground"
               aria-label={`${siteConfig.name} — на главную`}
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 text-sm font-bold text-black shadow-lg shadow-amber-500/30">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-800 text-sm font-bold text-white">
                 L
               </span>
               <span className="hidden sm:inline">
-                LED<span className="text-amber-400">Light</span>
+                LED<span className="text-copper-400">Light</span>
               </span>
             </a>
 
@@ -67,9 +67,9 @@ export default function Header() {
             <div className="hidden items-center gap-5 md:flex">
               <a
                 href={siteConfig.phoneHref}
-                className="flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-foreground transition-colors hover:text-amber-400"
+                className="flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-foreground transition-colors hover:text-copper-400"
               >
-                <Phone size={15} className="text-amber-400" />
+                <Phone size={15} className="text-copper-400" />
                 {siteConfig.phoneDisplay}
               </a>
               <a
@@ -83,7 +83,7 @@ export default function Header() {
                 href={siteConfig.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-subtle transition-colors hover:text-emerald-400"
+                className="text-subtle transition-colors hover:text-copper-400"
                 aria-label="Написать в WhatsApp"
               >
                 <MessageCircle size={20} />
@@ -92,7 +92,7 @@ export default function Header() {
                 href={siteConfig.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-subtle transition-colors hover:text-amber-400"
+                className="text-subtle transition-colors hover:text-copper-400"
                 aria-label="Написать в Telegram"
               >
                 <Send size={20} />
@@ -102,7 +102,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setCallbackModal(true)}
-                className="hidden text-sm font-medium text-amber-400 transition-colors hover:text-amber-300 md:inline-flex"
+                className="hidden text-sm font-medium text-copper-400 transition-colors hover:text-copper-300 md:inline-flex"
               >
                 Заказать звонок
               </button>
@@ -129,7 +129,7 @@ export default function Header() {
             menuOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="border-border bg-surface/95 backdrop-blur-xl">
+          <div className="border-t border-border bg-surface">
             <div className="container-custom flex flex-col gap-2 py-4">
               {navLinks.map((link) => (
                 <a
@@ -159,7 +159,7 @@ export default function Header() {
                   href={siteConfig.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted transition-colors hover:text-emerald-400"
+                  className="text-muted transition-colors hover:text-copper-400"
                   aria-label="Написать в WhatsApp"
                 >
                   <MessageCircle size={20} />
@@ -168,7 +168,7 @@ export default function Header() {
                   href={siteConfig.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted transition-colors hover:text-amber-400"
+                  className="text-muted transition-colors hover:text-copper-400"
                   aria-label="Написать в Telegram"
                 >
                   <Send size={20} />
@@ -179,7 +179,7 @@ export default function Header() {
                   setMenuOpen(false);
                   setCallbackModal(true);
                 }}
-                className="py-1 text-left text-sm font-medium text-amber-400"
+                className="py-1 text-left text-sm font-medium text-copper-400"
               >
                 Заказать звонок
               </button>

@@ -1,47 +1,45 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteConfig } from "@/lib/site-config";
 
-// nonce-based CSP требует dynamic rendering: Next.js применяет nonce к
-// инлайн-скриптам (RSC flight data, гидрация) во время server-side рендеринга
-// на основе CSP header из middleware. Static-страницы генерируются в build
-// time без nonce и были бы заблокированы браузером.
-// См. node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md
 export const dynamic = "force-dynamic";
 
-const inter = Inter({
-  variable: "--font-inter",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "LEDLight — Производство светодиодных светильников в РФ",
+  title: "LEDLight — промышленное освещение для бизнеса",
   description:
-    "Собственное производство LED-светильников для бизнеса. Офисные, промышленные, уличные и линейные светильники. Гарантия до 5 лет. Доставка по всей РФ.",
+    "Производство светодиодных светильников в РФ. Офисные, промышленные, уличные и линейные решения для B2B. Гарантия до 5 лет. Доставка по всей РФ.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ),
   openGraph: {
-    title: "LEDLight — Производство светодиодных светильников в РФ",
+    title: "LEDLight — промышленное освещение для бизнеса",
     description:
-      "Собственное производство LED-светильников для бизнеса. Офисные, промышленные, уличные и линейные светильники. Гарантия до 5 лет.",
-    // og:image* генерируется автоматически из src/app/opengraph-image.tsx
-    // (Next.js metadata file convention → ImageResponse → PNG 1200×630).
+      "Производство светодиодных светильников в РФ. Офисные, промышленные, уличные и линейные решения. Гарантия до 5 лет.",
     locale: "ru_RU",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LEDLight — Производство светодиодных светильников в РФ",
+    title: "LEDLight — промышленное освещение для бизнеса",
     description:
-      "Собственное производство LED-светильников для бизнеса. Гарантия до 5 лет. Доставка по всей РФ.",
-    // twitter:image не задаём явно: при отсутствии twitter-image.* Next.js
-    // использует opengraph-image, а Twitter сам берёт og:image как fallback.
+      "Производство светодиодных светильников в РФ. Гарантия до 5 лет. Доставка по всей РФ.",
   },
   icons: {
     icon: "/favicon.ico",
@@ -54,11 +52,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={`${inter.variable}`}>
+    <html lang="ru" className={`${manrope.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
         <a
           href="#content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-amber-500 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-background"
         >
           Перейти к содержимому
         </a>

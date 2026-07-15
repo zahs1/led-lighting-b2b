@@ -5,9 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { callbackFormSchema, type CallbackFormType } from "@/lib/validations";
 import { Loader2 } from "lucide-react";
 import Honeypot from "@/components/Honeypot";
+import SuccessMessage from "@/components/SuccessMessage";
 import { useLeadSubmit } from "@/hooks/useLeadSubmit";
 
 interface CallbackFormProps {
+  /** Обработчик закрытия — вызывается кнопкой «Закрыть» в success-состоянии. */
   onSuccess?: () => void;
 }
 
@@ -24,8 +26,18 @@ export default function CallbackForm({ onSuccess }: CallbackFormProps) {
   const { onSubmit, state } = useLeadSubmit<CallbackFormType>({
     formType: "callback",
     setError: setFieldError,
-    onSuccess,
   });
+
+  if (state.status === "success") {
+    return (
+      <SuccessMessage
+        compact
+        onClose={onSuccess}
+        title="Заявка принята"
+        text="Перезвоним в течение рабочего дня в удобное время."
+      />
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">

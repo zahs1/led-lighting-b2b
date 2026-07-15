@@ -56,3 +56,5 @@ next-env.d.ts
 
 # local Claude Code config (hookify rules, settings.local.json) — not for the repo
 .claude/
+.impeccable/
+.playwright-mcp/

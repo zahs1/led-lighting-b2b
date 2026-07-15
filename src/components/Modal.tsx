@@ -13,7 +13,12 @@ interface ModalProps {
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
-export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+}: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
 
@@ -21,14 +26,14 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     },
-    [onClose]
+    [onClose],
   );
 
   const handleTab = useCallback((e: KeyboardEvent) => {
     const dialog = dialogRef.current;
     if (!dialog || e.key !== "Tab") return;
     const focusable = Array.from(
-      dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
     ).filter((el) => el.offsetParent !== null);
     if (focusable.length === 0) return;
     const first = focusable[0];
@@ -58,7 +63,10 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("keydown", handleTab);
       document.body.style.overflow = "";
-      if (triggerRef.current && typeof triggerRef.current.focus === "function") {
+      if (
+        triggerRef.current &&
+        typeof triggerRef.current.focus === "function"
+      ) {
         triggerRef.current.focus();
       }
     };
@@ -74,14 +82,14 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       aria-labelledby="modal-title"
     >
       <div
-        className="absolute inset-0 animate-fade-in bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 animate-fade-in bg-foreground/60 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="glass animate-fade-in-up relative max-h-[90vh] w-full max-w-lg overflow-y-auto p-6 shadow-2xl shadow-black/50 outline-none md:p-8"
+        className="relative max-h-[90vh] w-full max-w-lg animate-scale-in overflow-y-auto rounded-xl border border-border bg-card p-6 shadow-xl outline-none md:p-8"
       >
         <button
           onClick={onClose}

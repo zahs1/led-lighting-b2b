@@ -1,69 +1,62 @@
-import { advantages } from "@/data/mock";
-import {
-  Factory,
-  Award,
-  BadgeCheck,
-  Clock,
-  Headphones,
-  Wrench,
-  Paintbrush,
-  Ruler,
-  Users,
-  Leaf,
-  type LucideIcon,
-} from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 
-const iconMap: Record<string, LucideIcon> = {
-  factory: Factory,
-  certificate: Award,
-  badge: BadgeCheck,
-  clock: Clock,
-  headphones: Headphones,
-  wrench: Wrench,
-  paintbrush: Paintbrush,
-  ruler: Ruler,
-  users: Users,
-  leaf: Leaf,
-};
+const points = [
+  {
+    figure: "Полный цикл",
+    label: "Собственное производство",
+    text: "Завод в Московской области: от входного контроля компонентов до тестирования каждой партии.",
+  },
+  {
+    figure: "5 лет",
+    label: "Гарантия",
+    text: "Максимальная в отрасли. Сервисные центры в 12 городах РФ, постгарантийный ремонт.",
+  },
+  {
+    figure: "5000 SKU",
+    label: "Складская программа",
+    text: "Отгрузка день в день со склада готовой продукции. Срочное производство — 3 дня.",
+  },
+  {
+    figure: "Dialux EVO",
+    label: "Расчёт бесплатно",
+    text: "Светотехнический расчёт по нормам СП 52.13330 и СанПиН. Карта освещённости и подбор серий.",
+  },
+];
 
 export default function WhyChooseUs() {
   return (
-    <div className="py-24 md:py-32">
+    <div className="py-24 md:py-32 bg-surface">
       <div className="container-custom">
         <FadeIn>
-          <div className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="mb-12 max-w-2xl">
             <span className="eyebrow">Преимущества</span>
-            <h2 className="mx-auto mt-4 mb-5 max-w-2xl text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               Почему выбирают нас
             </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-relaxed text-muted">
-              10 лет на рынке светотехники. Собственное производство,
-              инженерный центр и гарантия качества.
+            <p className="mt-4 text-lg leading-relaxed text-muted">
+              10 лет на рынке светотехники. Четыре факта, которые можно
+              проверить, — вместо десяти одинаковых обещаний.
             </p>
           </div>
         </FadeIn>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
-          {advantages.slice(0, 10).map((adv, idx) => {
-            const Icon = iconMap[adv.icon] ?? BadgeCheck;
-            return (
-              <FadeIn key={adv.id} delay={idx * 60}>
-                <div className="card-base group h-full p-6 text-center hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/5 hover:-translate-y-1">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 transition-all duration-300 group-hover:bg-amber-500 group-hover:text-black">
-                    <Icon size={22} />
-                  </div>
-                  <h3 className="mb-1.5 text-sm font-semibold text-foreground">
-                    {adv.title}
-                  </h3>
-                  <p className="text-xs leading-relaxed text-muted">
-                    {adv.description}
-                  </p>
+        <FadeIn delay={80}>
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2">
+            {points.map((p) => (
+              <div key={p.label} className="bg-card p-7 md:p-8">
+                <div className="font-mono text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                  {p.figure}
                 </div>
-              </FadeIn>
-            );
-          })}
-        </div>
+                <div className="mt-1 font-mono text-xs text-copper-400">
+                  {p.label}
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  {p.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
       </div>
     </div>
   );

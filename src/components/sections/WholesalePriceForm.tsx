@@ -39,10 +39,10 @@ export default function WholesalePriceForm() {
         <div className="mx-auto max-w-xl">
           <FadeIn>
             <div className="mb-12 text-center">
-              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
+              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-lg border border-border text-copper-400">
                 <Download size={28} />
               </div>
-              <h2 className="mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 Получить оптовый прайс-лист
               </h2>
               <p className="mx-auto max-w-lg text-lg leading-relaxed text-muted">
@@ -54,8 +54,9 @@ export default function WholesalePriceForm() {
 
           <FadeIn delay={100}>
             <form
-              onSubmit={handleSubmit(onSubmit)} noValidate
-              className="card-base p-8 shadow-xl shadow-black/20 md:p-10"
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate
+              className="card-base p-8 shadow-sm md:p-10"
             >
               <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">

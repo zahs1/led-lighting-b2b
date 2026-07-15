@@ -19,15 +19,15 @@ const iconMap: Record<string, LucideIcon> = {
 
 export default function TargetAudience() {
   return (
-    <div className="py-24 md:py-32">
+    <div id="target-audience" className="py-24 md:py-32">
       <div className="container-custom">
         <FadeIn>
-          <div className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="section-header">
             <span className="eyebrow">Кому мы подходим</span>
-            <h2 className="mx-auto mt-4 mb-5 max-w-2xl text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            <h2 className="section-title">
               Работаем с профессионалами
             </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-relaxed text-muted">
+            <p className="section-subtitle">
               Понимаем специфику каждой аудитории. Находим индивидуальный подход
               к клиентам любого масштаба.
             </p>
@@ -39,8 +39,8 @@ export default function TargetAudience() {
             const Icon = iconMap[card.icon] ?? Building2;
             return (
               <FadeIn key={card.title} delay={idx * 80}>
-                <div className="card-base group h-full p-6 hover:border-amber-500/40 hover:bg-card-hover hover:shadow-xl hover:shadow-amber-500/5 hover:-translate-y-1">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 transition-colors group-hover:bg-amber-500/20">
+                <div className="card-base group h-full p-6 transition-all duration-200 hover:border-border-strong hover:shadow-sm">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-surface text-copper-400 transition-colors group-hover:border-copper-500/30 group-hover:bg-copper-500/5">
                     <Icon size={22} />
                   </div>
                   <h3 className="mb-2 text-base font-semibold text-foreground">
@@ -53,7 +53,7 @@ export default function TargetAudience() {
                     {card.features.map((feat) => (
                       <span
                         key={feat}
-                        className="rounded-md border border-border bg-surface px-2.5 py-1 text-xs text-muted"
+                        className="rounded-md border border-border bg-surface px-2.5 py-1 font-mono text-xs text-muted"
                       >
                         {feat}
                       </span>
