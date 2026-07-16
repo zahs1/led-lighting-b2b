@@ -34,17 +34,40 @@ export default function Counter({
 
   useEffect(() => {
     if (!inView) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     let raf = 0;
+    let backstop = 0;
+
+    if (reduced) {
+      // Reduced-motion (a11y 2.3.3): финал без анимации. Через rAF-callback,
+      // чтобы не вызывать setState синхронно в теле effect (react-hooks rule).
+      raf = requestAnimationFrame(() => setValue(to));
+      return () => cancelAnimationFrame(raf);
+    }
+
     const t0 = performance.now();
     const tick = (now: number) => {
-      const p = Math.min((now - t0) / duration, 1);
+      const elapsed = now - t0;
+      if (elapsed >= duration) {
+        setValue(to); // точный финал
+        return;
+      }
       // easeOutExpo
-      const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      const eased = 1 - Math.pow(2, (-10 * elapsed) / duration);
       setValue(from + (to - from) * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // Backstop: гарантирует финальное значение, даже если rAF-цикл оборвался
+    // (cleanup/throttle) на предпоследнем кадре — иначе малые значения
+    // (напр. 70) округлялись бы до 69.
+    backstop = window.setTimeout(() => setValue(to), duration + 60);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(backstop);
+    };
   }, [inView, from, to, duration]);
 
   const num =

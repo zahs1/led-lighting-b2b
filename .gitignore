@@ -18,6 +18,9 @@
 /playwright-report/
 /playwright/.cache/
 /blob-report/
+# Генерируемые артефакты e2e (скриншоты визульного ревью, Lighthouse-отчёты)
+/tests/screenshots/
+/tests/lighthouse-report.*
 
 # next.js
 /.next/

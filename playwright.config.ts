@@ -15,6 +15,10 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "list",
 
+  // Буфер для cold-start dev-сервера (Turbopack компилирует on-demand) и
+  // count-up анимаций Counter (~1.8s после inView).
+  expect: { timeout: 20_000 },
+
   use: {
     baseURL: "http://localhost:3000",
     // Отключаем артефакты для скорости smoke-прогонов.
