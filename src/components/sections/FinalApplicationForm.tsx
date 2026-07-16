@@ -37,7 +37,12 @@ export default function FinalApplicationForm() {
   }
 
   return (
-    <div className="relative py-24 md:py-32">
+    <div className="relative overflow-hidden py-24 md:py-32">
+      {/* Atmosphere — faint grid + copper glow behind the form */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="hairline-grid absolute inset-0 opacity-[0.15]" />
+        <div className="glow-pulse absolute left-1/2 top-0 h-[420px] w-[640px] -translate-x-1/2 rounded-full bg-copper-500/[0.05] blur-[130px]" />
+      </div>
       <div className="container-custom relative z-10">
         <div className="mx-auto max-w-3xl">
           <FadeIn>
@@ -158,8 +163,8 @@ export default function FinalApplicationForm() {
                 />
               </div>
               <div className="mb-6">
-                    <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-border-strong bg-card px-5 py-4 transition-colors hover:border-copper-500/40 hover:bg-card-hover">
-                      <Upload size={18} className="text-copper-400" />
+                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-border-strong bg-card px-5 py-4 transition-colors hover:border-copper-500/40 hover:bg-card-hover">
+                  <Upload size={18} className="text-copper-400" />
                   <span className="text-sm text-muted">
                     {file
                       ? file.name

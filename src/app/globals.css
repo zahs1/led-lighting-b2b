@@ -400,7 +400,11 @@
   pointer-events: none;
   opacity: 0;
 }
-.group:hover .sheen::after {
+/* `.group:hover .sheen::after` needs `.sheen` as a *descendant* of `.group`.
+   When both classes sit on the same element (the common card pattern), add the
+   same-element form so the sweep actually fires. */
+.group:hover .sheen::after,
+.group.sheen:hover::after {
   transform: translateX(130%);
   opacity: 0.45;
 }
@@ -470,6 +474,7 @@
   transition: opacity 0.4s ease;
   pointer-events: none;
 }
-.group:hover .edge-glow::before {
+.group:hover .edge-glow::before,
+.group.edge-glow:hover::before {
   opacity: 0.8;
 }

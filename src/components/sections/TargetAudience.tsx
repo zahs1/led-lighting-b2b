@@ -24,9 +24,7 @@ export default function TargetAudience() {
         <FadeIn>
           <div className="section-header">
             <span className="eyebrow">Кому мы подходим</span>
-            <h2 className="section-title">
-              Работаем с профессионалами
-            </h2>
+            <h2 className="section-title">Работаем с профессионалами</h2>
             <p className="section-subtitle">
               Понимаем специфику каждой аудитории. Находим индивидуальный подход
               к клиентам любого масштаба.
@@ -39,7 +37,7 @@ export default function TargetAudience() {
             const Icon = iconMap[card.icon] ?? Building2;
             return (
               <FadeIn key={card.title} delay={idx * 80}>
-                <div className="card-base group h-full p-6 transition-all duration-200 hover:border-border-strong hover:shadow-sm">
+                <div className="card-base group sheen edge-glow h-full p-6 transition-all duration-200 hover:border-border-strong hover:shadow-xl">
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-surface text-copper-400 transition-colors group-hover:border-copper-500/30 group-hover:bg-copper-500/5">
                     <Icon size={22} />
                   </div>

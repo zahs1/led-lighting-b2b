@@ -18,9 +18,7 @@ export default function PopularModels() {
         <FadeIn>
           <div className="section-header">
             <span className="eyebrow">Хиты продаж</span>
-            <h2 className="section-title">
-              Популярные модели
-            </h2>
+            <h2 className="section-title">Популярные модели</h2>
             <p className="section-subtitle">
               Оптимальное соотношение цены, качества и характеристик. Выбор
               наших клиентов.
@@ -31,13 +29,13 @@ export default function PopularModels() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product, idx) => (
             <FadeIn key={product.id} delay={idx * 80}>
-              <div className="card-base group flex h-full flex-col overflow-hidden transition-all duration-200 hover:border-border-strong hover:shadow-sm">
+              <div className="card-base group sheen edge-glow flex h-full flex-col overflow-hidden transition-all duration-200 hover:border-border-strong hover:shadow-xl">
                 <div className="relative aspect-[4/3] overflow-hidden bg-surface">
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover transition-all duration-500 group-hover:scale-[1.04]"
+                    className="parallax-y object-cover transition-all duration-500 group-hover:scale-[1.04]"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   {product.oldPrice > product.price && (

@@ -38,9 +38,7 @@ export default function DocumentsSection() {
         <FadeIn>
           <div className="section-header">
             <span className="eyebrow">Документация</span>
-            <h2 className="section-title">
-              Документы и гарантия
-            </h2>
+            <h2 className="section-title">Документы и гарантия</h2>
             <p className="section-subtitle">
               Предоставляем полный пакет документов на каждую партию. Гарантия
               до 5 лет на все светильники.
@@ -53,7 +51,7 @@ export default function DocumentsSection() {
             const Icon = item.icon;
             return (
               <FadeIn key={item.title} delay={idx * 80}>
-                <div className="card-base h-full p-6 transition-colors hover:border-border-strong">
+                <div className="card-base group sheen edge-glow h-full p-6 transition-all duration-200 hover:border-border-strong hover:shadow-xl">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-border text-copper-400">
                     <Icon size={24} />
                   </div>

@@ -1,18 +1,31 @@
 import FadeIn from "@/components/FadeIn";
+import Counter from "@/components/Counter";
 
-const points = [
+type Point = {
+  /** Статичная подпись фигуры (для нечисловых значений вроде «Полный цикл»). */
+  figure?: string;
+  /** Числовое значение — анимируется count-up. Если задано, перекрывает figure. */
+  to?: number;
+  suffix?: string;
+  label: string;
+  text: string;
+};
+
+const points: Point[] = [
   {
     figure: "Полный цикл",
     label: "Собственное производство",
     text: "Завод в Московской области: от входного контроля компонентов до тестирования каждой партии.",
   },
   {
-    figure: "5 лет",
+    to: 5,
+    suffix: " лет",
     label: "Гарантия",
     text: "Максимальная в отрасли. Сервисные центры в 12 городах РФ, постгарантийный ремонт.",
   },
   {
-    figure: "5000 SKU",
+    to: 5000,
+    suffix: " SKU",
     label: "Складская программа",
     text: "Отгрузка день в день со склада готовой продукции. Срочное производство — 3 дня.",
   },
@@ -45,7 +58,11 @@ export default function WhyChooseUs() {
             {points.map((p) => (
               <div key={p.label} className="bg-card p-7 md:p-8">
                 <div className="font-mono text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                  {p.figure}
+                  {p.to !== undefined ? (
+                    <Counter to={p.to} suffix={p.suffix} />
+                  ) : (
+                    p.figure
+                  )}
                 </div>
                 <div className="mt-1 font-mono text-xs text-copper-400">
                   {p.label}

@@ -45,9 +45,7 @@ export default function TestimonialsSection() {
         <FadeIn>
           <div className="section-header">
             <span className="eyebrow">Отзывы</span>
-            <h2 className="section-title">
-              Нам доверяют
-            </h2>
+            <h2 className="section-title">Нам доверяют</h2>
             <p className="section-subtitle">
               Более 500 постоянных клиентов по всей России. Вот что говорят о
               нас.
@@ -58,7 +56,7 @@ export default function TestimonialsSection() {
         <div className="mb-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((item, idx) => (
             <FadeIn key={item.id} delay={idx * 100}>
-              <div className="card-base flex h-full flex-col p-6 transition-all duration-200 hover:border-border-strong hover:shadow-sm">
+              <div className="card-base group sheen edge-glow flex h-full flex-col p-6 transition-all duration-200 hover:border-border-strong hover:shadow-xl">
                 <Quote size={24} className="mb-4 shrink-0 text-copper-500/40" />
                 <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">
                   {item.text}
