@@ -51,8 +51,11 @@ test.describe("Формы заявок: заполнение и success-state", 
     ]);
     expect(response.ok()).toBeTruthy();
 
-    // onSuccess закрывает модалку — это и есть success-state формы CallbackForm.
-    await expect(page.getByRole("dialog")).toHaveCount(0, { timeout: 15000 });
+    // Success-state CallbackForm: внутри модалки показывается SuccessMessage
+    // «Заявка принята» (onSuccess закрывает модалку только по клику «Закрыть»).
+    await expect(dialog.getByText("Заявка принята")).toBeVisible({
+      timeout: 15_000,
+    });
   });
 
   test("WholesalePriceForm (#wholesale-price) — success → SuccessMessage", async ({
@@ -121,7 +124,7 @@ test.describe("Формы заявок: заполнение и success-state", 
     expect(response.ok()).toBeTruthy();
 
     await expect(
-      section.getByRole("heading", { name: "ТЗ получено!" }),
+      section.getByRole("heading", { name: "ТЗ получено" }),
     ).toBeVisible();
   });
 
@@ -186,7 +189,7 @@ test.describe("Формы заявок: заполнение и success-state", 
     expect(response.ok()).toBeTruthy();
 
     await expect(
-      section.getByRole("heading", { name: "Спасибо за заявку!" }),
+      section.getByRole("heading", { name: "Заявка отправлена" }),
     ).toBeVisible();
   });
 });

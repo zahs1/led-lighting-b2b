@@ -29,7 +29,7 @@ test.describe("Smoke-e2e: критический путь B2B LED-лендинг
     await expect(page.locator("h1")).toContainText("LED-светильники");
     await expect(page.locator("h1")).toContainText("для вашего бизнеса");
     await expect(
-      page.getByText("Собственное производство в РФ").first(),
+      page.getByText("Собственное производство · РФ").first(),
     ).toBeVisible();
     await expect(page.getByText("Гарантия до 5 лет").first()).toBeVisible();
 
@@ -91,7 +91,11 @@ test.describe("Smoke-e2e: критический путь B2B LED-лендинг
     ]);
     expect(response.ok()).toBeTruthy();
 
-    // onSuccess закрывает модалку — это и есть success-state формы LeadForm
-    await expect(page.getByRole("dialog")).toHaveCount(0, { timeout: 15000 });
+    // Success-state формы LeadForm: внутри модалки показывается SuccessMessage
+    // с заголовком «Заявка принята» (onSuccess закрывает модалку только по клику
+    // «Закрыть», поэтому ждём сам success-message, а не исчезновение диалога).
+    await expect(dialog.getByText("Заявка принята")).toBeVisible({
+      timeout: 15_000,
+    });
   });
 });
