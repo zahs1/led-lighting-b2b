@@ -56,7 +56,7 @@ export default function HowWeWork() {
   const activeStep = steps.find((s) => s.number === active) ?? steps[0];
 
   return (
-    <div id="how-we-work" className="py-24 md:py-32">
+    <div className="py-24 md:py-32">
       <div className="container-custom">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           {/* ── Sticky explainer panel ── */}

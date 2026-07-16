@@ -19,7 +19,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 export default function TargetAudience() {
   return (
-    <div id="target-audience" className="py-24 md:py-32">
+    <div className="py-24 md:py-32">
       <div className="container-custom">
         <FadeIn>
           <div className="section-header">

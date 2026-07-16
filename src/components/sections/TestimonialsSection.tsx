@@ -40,7 +40,7 @@ const partners = [
 
 export default function TestimonialsSection() {
   return (
-    <div id="testimonials" className="py-24 md:py-32 bg-navy-900">
+    <div className="py-24 md:py-32 bg-navy-900">
       <div className="container-custom">
         <FadeIn>
           <div className="section-header">

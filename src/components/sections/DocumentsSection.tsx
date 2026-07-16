@@ -33,7 +33,7 @@ const documents: { icon: LucideIcon; title: string; desc: string }[] = [
 
 export default function DocumentsSection() {
   return (
-    <div id="documents" className="py-24 md:py-32">
+    <div className="py-24 md:py-32">
       <div className="container-custom">
         <FadeIn>
           <div className="section-header">

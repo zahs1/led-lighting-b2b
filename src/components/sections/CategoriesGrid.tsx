@@ -31,7 +31,7 @@ const bentoClass = (idx: number): string => {
 
 export default function CategoriesGrid() {
   return (
-    <div id="categories" className="py-24 md:py-32">
+    <div className="py-24 md:py-32">
       <div className="container-custom">
         <FadeIn>
           <div className="section-header">
