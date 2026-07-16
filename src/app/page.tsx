@@ -1,5 +1,17 @@
 import HeroSection from "@/components/sections/HeroSection";
 import TargetAudience from "@/components/sections/TargetAudience";
+import Marquee from "@/components/Marquee";
+
+const USP_ITEMS = [
+  "Светотехнический расчёт Dialux EVO",
+  "Гарантия до 5 лет",
+  "Сертификация EAC",
+  "Работа по 44-ФЗ и 223-ФЗ",
+  "Отгрузка от 1 дня",
+  "Собственное производство",
+  "IES / DWG файлы",
+  "Сервис в 12 городах РФ",
+];
 import WholesalePriceForm from "@/components/sections/WholesalePriceForm";
 import CategoriesGrid from "@/components/sections/CategoriesGrid";
 import PopularModels from "@/components/sections/PopularModels";
@@ -17,6 +29,22 @@ export default function Home() {
     <>
       <section id="hero">
         <HeroSection />
+      </section>
+      <section
+        aria-label="Ключевые преимущества"
+        className="border-y border-border bg-surface py-4"
+      >
+        <Marquee speed={34}>
+          {USP_ITEMS.map((item) => (
+            <span
+              key={item}
+              className="mx-6 inline-flex items-center gap-3 whitespace-nowrap font-mono text-xs uppercase tracking-wider text-muted"
+            >
+              <span className="h-1 w-1 rounded-full bg-copper-500" />
+              {item}
+            </span>
+          ))}
+        </Marquee>
       </section>
       <section id="target-audience">
         <TargetAudience />

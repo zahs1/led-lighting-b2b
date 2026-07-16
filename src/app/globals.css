@@ -11,16 +11,16 @@
   --color-copper-600: oklch(0.52 0.12 43);
   --color-copper-700: oklch(0.43 0.1 40);
 
-  /* ── Premium neutrals (cool-warm balanced) ── */
-  --color-background: oklch(0.982 0.002 260); /* paper-white */
-  --color-surface: oklch(0.965 0.003 255);    /* subtle section bg */
-  --color-card: oklch(1 0 0);                 /* pure white card */
-  --color-card-hover: oklch(0.97 0.003 255);
-  --color-border: oklch(0.88 0.004 260);      /* hairline */
-  --color-border-strong: oklch(0.75 0.006 260);
-  --color-foreground: oklch(0.18 0.01 260);    /* deep ink */
-  --color-muted: oklch(0.42 0.012 260);        /* body text: ~5:1 on paper */
-  --color-subtle: oklch(0.55 0.01 260);
+  /* ── Dark mode neutrals (navy-based) ── */
+  --color-background: oklch(0.08 0.012 260); /* deep navy page bg */
+  --color-surface: oklch(0.11 0.015 258); /* section bg */
+  --color-card: oklch(0.14 0.018 256); /* card bg */
+  --color-card-hover: oklch(0.17 0.02 254);
+  --color-border: oklch(0.2 0.02 254); /* hairline */
+  --color-border-strong: oklch(0.3 0.025 252);
+  --color-foreground: oklch(0.93 0.005 260); /* light text */
+  --color-muted: oklch(0.58 0.015 260); /* body text */
+  --color-subtle: oklch(0.45 0.012 260);
 
   /* ── Deep navy (premium B2B anchor) ──────── */
   --color-navy-50: oklch(0.95 0.015 270);
@@ -62,7 +62,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   body {
@@ -203,8 +203,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
@@ -228,4 +232,244 @@
 
 .animate-scale-in {
   animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOTION SYSTEM — CSS-only, progressive enhancement.
+   Native scroll-driven animations where supported (Chromium 115+,
+   Safari 18+); IntersectionObserver fallback everywhere else.
+   Honors prefers-reduced-motion globally (see @layer base).
+   ════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Element reveal driven by JS (.is-visible added by Reveal/FadeIn).
+     Reduced-motion is handled in useInView (shows immediately). */
+  .will-reveal {
+    will-change: transform, opacity;
+  }
+
+  /* Per-word text reveal — wrap each word in <span class="reveal-word">
+     inside a container that receives .is-visible */
+  .reveal-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.5em);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .is-visible .reveal-word {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Magnetic element — transform driven by useMagnetic hook */
+  .magnetic {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+  .magnetic-inner {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    display: inline-flex;
+  }
+}
+
+/* ── Native scroll-driven (no JS) — only where supported ── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-native {
+      animation: revealIn linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 45%;
+    }
+    @keyframes revealIn {
+      from {
+        opacity: 0;
+        transform: translateY(42px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Vertical parallax for images inside cards */
+    .parallax-y {
+      animation: parallaxY linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    @keyframes parallaxY {
+      from {
+        transform: translateY(-10%);
+      }
+      to {
+        transform: translateY(10%);
+      }
+    }
+  }
+}
+
+/* ── Kinetic hero atmosphere ── */
+@keyframes spotlight-sweep {
+  0% {
+    transform: translate(-25%, -15%) rotate(8deg);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.85;
+  }
+  65% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(25%, 18%) rotate(-6deg);
+    opacity: 0;
+  }
+}
+.spotlight {
+  animation: spotlight-sweep 16s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.06);
+  }
+}
+.glow-pulse {
+  animation: glow-pulse 7s ease-in-out infinite;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.float-y {
+  animation: float-y 8s ease-in-out infinite;
+}
+
+/* ── Marquee (logos / advantages ticker) ── */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Copper sheen sweep on card hover ── */
+.sheen {
+  position: relative;
+  overflow: hidden;
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.05) 46%,
+    var(--color-copper-300) 50%,
+    rgba(255, 255, 255, 0.05) 54%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  opacity: 0;
+}
+.group:hover .sheen::after {
+  transform: translateX(130%);
+  opacity: 0.45;
+}
+
+/* ── Animated gradient text (copper shimmer) ── */
+@keyframes gradient-pan {
+  to {
+    background-position: 200% center;
+  }
+}
+.text-gradient-copper {
+  background: linear-gradient(
+    100deg,
+    var(--color-copper-300),
+    var(--color-copper-500),
+    #fff 50%,
+    var(--color-copper-500),
+    var(--color-copper-300)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 7s linear infinite;
+}
+
+/* ── Subtle grid backdrop for hero ── */
+.hairline-grid {
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000 0%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000 0%,
+    transparent 75%
+  );
+}
+
+/* ── Tilted card edge glow ── */
+.edge-glow {
+  position: relative;
+}
+.edge-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    transparent 30%,
+    var(--color-copper-400) 50%,
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.group:hover .edge-glow::before {
+  opacity: 0.8;
 }

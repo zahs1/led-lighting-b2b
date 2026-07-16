@@ -27,12 +27,24 @@ export interface Product {
   category: string;
 }
 
+export interface ProjectMetric {
+  value: number;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+  decimals?: number;
+}
+
 export interface Project {
   id: string;
   title: string;
   description: string;
   image: string;
   category: string;
+  /** Ключевые показатели объекта — анимируются count-up в секции проектов. */
+  metrics?: ProjectMetric[];
+  /** Крупная карточка-кейс в bento-сетке (одна на раздел). */
+  featured?: boolean;
 }
 
 export interface Step {
