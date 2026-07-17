@@ -97,8 +97,6 @@ export default function Footer() {
             </h4>
             <div className="mb-6 space-y-1 text-sm leading-relaxed text-muted">
               <p>{siteConfig.company.legal}</p>
-              <p>ИНН: {siteConfig.company.inn}</p>
-              <p>ОГРН: {siteConfig.company.ogrn}</p>
             </div>
             <div className="flex flex-col gap-3">
               <a

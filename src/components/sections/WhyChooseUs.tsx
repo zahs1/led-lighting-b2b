@@ -57,7 +57,10 @@ export default function WhyChooseUs() {
           <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2">
             {points.map((p) => (
               <div key={p.label} className="bg-card p-7 md:p-8">
-                <div className="font-mono text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                <div
+                  className="font-mono text-2xl font-semibold tracking-tight text-foreground md:text-3xl"
+                  aria-live="polite"
+                >
                   {p.to !== undefined ? (
                     <Counter to={p.to} suffix={p.suffix} />
                   ) : (

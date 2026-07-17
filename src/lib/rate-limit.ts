@@ -64,6 +64,13 @@ export async function checkRateLimit(
   const now = Date.now();
   const entry = rateMap.get(key);
 
+  // ponytail: sweep expired entries when map grows large
+  if (rateMap.size > 100) {
+    for (const [k, v] of rateMap) {
+      if (now > v.resetAt) rateMap.delete(k);
+    }
+  }
+
   if (!entry || now > entry.resetAt) {
     rateMap.set(key, { count: 1, resetAt: now + windowMs });
     return { allowed: true, remaining: maxRequests - 1, retryAfter: 0 };

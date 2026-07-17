@@ -43,34 +43,36 @@ export default function CallbackForm({ onSuccess }: CallbackFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
       <Honeypot register={register} name="website_url" />
       <div>
-        <label className="mb-2 block text-sm font-medium text-foreground">
+        <label htmlFor="callback-name" className="mb-2 block text-sm font-medium text-foreground">
           Ваше имя *
         </label>
         <input
+          id="callback-name"
           {...register("name")}
           placeholder="Иван Петров"
           className="input-field"
         />
         {errors.name && (
-          <p className="mt-1.5 text-sm text-red-400">{errors.name.message}</p>
+          <p role="alert" className="mt-1.5 text-sm text-red-400">{errors.name.message}</p>
         )}
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-foreground">
+        <label htmlFor="callback-phone" className="mb-2 block text-sm font-medium text-foreground">
           Телефон *
         </label>
         <input
+          id="callback-phone"
           {...register("phone")}
           placeholder="+7 (495) 123-45-67"
           type="tel"
           className="input-field"
         />
         {errors.phone && (
-          <p className="mt-1.5 text-sm text-red-400">{errors.phone.message}</p>
+          <p role="alert" className="mt-1.5 text-sm text-red-400">{errors.phone.message}</p>
         )}
       </div>
       {state.error && (
-        <p className="text-center text-sm text-red-400">{state.error}</p>
+        <p role="alert" className="text-center text-sm text-red-400">{state.error}</p>
       )}
       <button
         type="submit"

@@ -78,32 +78,34 @@ export default function SendTZBlock() {
               <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="tz-name" className="mb-2 block text-sm font-medium text-foreground">
                     Ваше имя *
                   </label>
                   <input
+                    id="tz-name"
                     {...register("name")}
                     className="input-field"
                     placeholder="Иван Петров"
                   />
                   {errors.name && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.name.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="tz-phone" className="mb-2 block text-sm font-medium text-foreground">
                     Телефон *
                   </label>
                   <input
+                    id="tz-phone"
                     {...register("phone")}
                     type="tel"
                     className="input-field"
                     placeholder="+7 (495) 123-45-67"
                   />
                   {errors.phone && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.phone.message}
                     </p>
                   )}
@@ -111,26 +113,28 @@ export default function SendTZBlock() {
               </div>
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="tz-email" className="mb-2 block text-sm font-medium text-foreground">
                     Email *
                   </label>
                   <input
+                    id="tz-email"
                     {...register("email")}
                     type="email"
                     className="input-field"
                     placeholder="ivan@company.ru"
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.email.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="tz-company" className="mb-2 block text-sm font-medium text-foreground">
                     Компания
                   </label>
                   <input
+                    id="tz-company"
                     {...register("company")}
                     className="input-field"
                     placeholder="ООО «СтройГрупп»"
@@ -138,10 +142,11 @@ export default function SendTZBlock() {
                 </div>
               </div>
               <div className="mb-5">
-                <label className="mb-2 block text-sm font-medium text-foreground">
+                <label htmlFor="tz-description" className="mb-2 block text-sm font-medium text-foreground">
                   Описание задачи
                 </label>
                 <textarea
+                  id="tz-description"
                   {...register("description")}
                   rows={2}
                   className="input-field resize-none"
@@ -166,7 +171,7 @@ export default function SendTZBlock() {
                 </label>
               </div>
               {state.error && (
-                <p className="mb-4 text-center text-sm text-red-400">
+                <p role="alert" className="mb-4 text-center text-sm text-red-400">
                   {state.error}
                 </p>
               )}

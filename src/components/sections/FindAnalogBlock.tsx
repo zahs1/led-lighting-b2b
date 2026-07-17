@@ -61,26 +61,34 @@ export default function FindAnalogBlock() {
                 <Honeypot register={register} name="website_url" />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
+                    <label htmlFor="analog-name" className="mb-2 block text-sm font-medium text-foreground">
+                      Ваше имя *
+                    </label>
                     <input
+                      id="analog-name"
                       {...register("name")}
-                      placeholder="Ваше имя *"
+                      placeholder="Иван Петров"
                       className="input-field"
                     />
                     {errors.name && (
-                      <p className="mt-1.5 text-sm text-red-400">
+                      <p role="alert" className="mt-1.5 text-sm text-red-400">
                         {errors.name.message}
                       </p>
                     )}
                   </div>
                   <div>
+                    <label htmlFor="analog-phone" className="mb-2 block text-sm font-medium text-foreground">
+                      Телефон *
+                    </label>
                     <input
+                      id="analog-phone"
                       {...register("phone")}
                       type="tel"
-                      placeholder="Телефон *"
+                      placeholder="+7 (495) 123-45-67"
                       className="input-field"
                     />
                     {errors.phone && (
-                      <p className="mt-1.5 text-sm text-red-400">
+                      <p role="alert" className="mt-1.5 text-sm text-red-400">
                         {errors.phone.message}
                       </p>
                     )}
@@ -88,38 +96,55 @@ export default function FindAnalogBlock() {
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
+                    <label htmlFor="analog-email" className="mb-2 block text-sm font-medium text-foreground">
+                      Email *
+                    </label>
                     <input
+                      id="analog-email"
                       {...register("email")}
                       type="email"
-                      placeholder="Email *"
+                      placeholder="ivan@company.ru"
                       className="input-field"
                     />
                     {errors.email && (
-                      <p className="mt-1.5 text-sm text-red-400">
+                      <p role="alert" className="mt-1.5 text-sm text-red-400">
                         {errors.email.message}
                       </p>
                     )}
                   </div>
-                  <input
-                    {...register("message")}
-                    placeholder="Марка / артикул / описание аналога"
-                    className="input-field"
-                  />
+                  <div>
+                    <label htmlFor="analog-message" className="mb-2 block text-sm font-medium text-foreground">
+                      Марка / артикул / описание
+                    </label>
+                    <input
+                      id="analog-message"
+                      {...register("message")}
+                      placeholder="Например, Trilux 356248"
+                      className="input-field"
+                    />
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <input
-                    {...register("quantity")}
-                    type="number"
-                    min={1}
-                    placeholder="Количество (шт)"
-                    className="input-field"
-                  />
-                  <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-card px-5 py-3 transition-all hover:border-copper-500/40 hover:bg-card-hover">
+                  <div>
+                    <label htmlFor="analog-quantity" className="mb-2 block text-sm font-medium text-foreground">
+                      Количество (шт)
+                    </label>
+                    <input
+                      id="analog-quantity"
+                      {...register("quantity")}
+                      type="number"
+                      min={1}
+                      placeholder="10"
+                      className="input-field"
+                    />
+                  </div>
+                  <label htmlFor="analog-file" className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-card px-5 py-3 transition-all hover:border-copper-500/40 hover:bg-card-hover">
                     <Upload size={18} className="text-copper-400" />
                     <span className="truncate text-sm text-muted">
                       {file ? file.name : "Фото аналога"}
                     </span>
                     <input
+                      id="analog-file"
                       ref={fileRef}
                       type="file"
                       accept=".pdf,.doc,.docx,.dwg,.jpg,.jpeg,.png"
@@ -130,7 +155,7 @@ export default function FindAnalogBlock() {
                   </label>
                 </div>
                 {state.error && (
-                  <p className="text-sm text-red-400">{state.error}</p>
+                  <p role="alert" className="text-sm text-red-400">{state.error}</p>
                 )}
                 <button
                   type="submit"

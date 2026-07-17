@@ -61,32 +61,34 @@ export default function WholesalePriceForm() {
               <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="wholesale-name" className="mb-2 block text-sm font-medium text-foreground">
                     Ваше имя *
                   </label>
                   <input
+                    id="wholesale-name"
                     {...register("name")}
                     className="input-field"
                     placeholder="Иван Петров"
                   />
                   {errors.name && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.name.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="wholesale-phone" className="mb-2 block text-sm font-medium text-foreground">
                     Телефон *
                   </label>
                   <input
+                    id="wholesale-phone"
                     {...register("phone")}
                     type="tel"
                     className="input-field"
                     placeholder="+7 (495) 123-45-67"
                   />
                   {errors.phone && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.phone.message}
                     </p>
                   )}
@@ -94,42 +96,45 @@ export default function WholesalePriceForm() {
               </div>
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="wholesale-email" className="mb-2 block text-sm font-medium text-foreground">
                     Email *
                   </label>
                   <input
+                    id="wholesale-email"
                     {...register("email")}
                     type="email"
                     className="input-field"
                     placeholder="ivan@company.ru"
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.email.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="wholesale-company" className="mb-2 block text-sm font-medium text-foreground">
                     Компания *
                   </label>
                   <input
+                    id="wholesale-company"
                     {...register("company")}
                     className="input-field"
                     placeholder="ООО «СтройГрупп»"
                   />
                   {errors.company && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.company.message}
                     </p>
                   )}
                 </div>
               </div>
               <div className="mb-6">
-                <label className="mb-2 block text-sm font-medium text-foreground">
+                <label htmlFor="wholesale-clientType" className="mb-2 block text-sm font-medium text-foreground">
                   Тип клиента *
                 </label>
                 <select
+                  id="wholesale-clientType"
                   {...register("clientType")}
                   className="input-field appearance-none"
                   defaultValue=""
@@ -142,13 +147,13 @@ export default function WholesalePriceForm() {
                   <option value="private">Частный клиент</option>
                 </select>
                 {errors.clientType && (
-                  <p className="mt-1.5 text-sm text-red-400">
+                  <p role="alert" className="mt-1.5 text-sm text-red-400">
                     {errors.clientType.message}
                   </p>
                 )}
               </div>
               {state.error && (
-                <p className="mb-4 text-center text-sm text-red-400">
+                <p role="alert" className="mb-4 text-center text-sm text-red-400">
                   {state.error}
                 </p>
               )}

@@ -29,7 +29,5 @@ export const siteConfig = {
   hours: HOURS,
   company: {
     legal: COMPANY_LEGAL_NAME,
-    inn: "1234567890",
-    ogrn: "1234567890123",
   },
 } as const;

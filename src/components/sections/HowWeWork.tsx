@@ -89,7 +89,14 @@ export default function HowWeWork() {
                 {activeStep.description}
               </p>
               {/* Progress */}
-              <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-surface">
+              <div
+                className="mt-5 h-1.5 overflow-hidden rounded-full bg-surface"
+                role="progressbar"
+                aria-valuenow={activeStep.number}
+                aria-valuemin={1}
+                aria-valuemax={steps.length}
+                aria-label={`Шаг ${activeStep.number} из ${steps.length}`}
+              >
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-copper-500 to-copper-300 transition-[width] duration-500 ease-out"
                   style={{

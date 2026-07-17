@@ -49,7 +49,7 @@ export async function uploadFile(file: File): Promise<UploadedFile | null> {
   }
 
   const blob = await put(file.name, file, {
-    access: "public",
+    access: "private",
     addRandomSuffix: true,
   });
 

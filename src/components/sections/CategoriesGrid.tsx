@@ -44,7 +44,7 @@ export default function CategoriesGrid() {
           </div>
         </FadeIn>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[224px] lg:gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
           {categories.map((cat, idx) => {
             const isAnchor = idx === 0;
 
@@ -57,8 +57,8 @@ export default function CategoriesGrid() {
               >
                 <a
                   href="#popular-models"
-                  className={`group sheen edge-glow relative flex h-full overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-border-strong hover:shadow-xl ${
-                    isAnchor ? "min-h-[300px] flex-col justify-end" : "flex-col"
+                  className={`group sheen edge-glow relative flex h-full min-h-[420px] overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:shadow-xl ${
+                    isAnchor ? "flex-col justify-end" : "flex-col"
                   }`}
                 >
                   {/* Media */}
@@ -84,18 +84,16 @@ export default function CategoriesGrid() {
                       }
                       priority={isAnchor}
                     />
-                    {isAnchor && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/55 to-transparent" />
-                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
                     {/* Power badge */}
                     <div className="absolute bottom-3 left-3 z-10">
-                      <span className="rounded-md border border-border bg-background/85 px-2.5 py-1 font-mono text-xs font-medium text-foreground backdrop-blur">
+                      <span className="rounded-md border border-white/20 bg-black/50 px-2.5 py-1 font-mono text-xs font-medium text-white backdrop-blur">
                         {cat.powerRange}
                       </span>
                     </div>
                     {/* Icon chip */}
-                    <div className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background/85 text-copper-400 backdrop-blur">
+                    <div className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-md border border-white/20 bg-black/50 text-copper-400 backdrop-blur">
                       {categoryIcons[cat.slug] ?? <Lightbulb size={20} />}
                     </div>
                   </div>

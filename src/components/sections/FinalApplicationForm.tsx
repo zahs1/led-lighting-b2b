@@ -41,7 +41,7 @@ export default function FinalApplicationForm() {
       {/* Atmosphere — faint grid + copper glow behind the form */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="hairline-grid absolute inset-0 opacity-[0.15]" />
-        <div className="glow-pulse absolute left-1/2 top-0 h-[420px] w-[640px] -translate-x-1/2 rounded-full bg-copper-500/[0.05] blur-[130px]" />
+        <div className="glow-pulse absolute left-1/2 top-0 h-[420px] w-[640px] -translate-x-1/2 rounded-full bg-copper-500/[0.05] blur-[80px]" />
       </div>
       <div className="container-custom relative z-10">
         <div className="mx-auto max-w-3xl">
@@ -67,32 +67,34 @@ export default function FinalApplicationForm() {
               <Honeypot register={register} name="website_url" />
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="final-name" className="mb-2 block text-sm font-medium text-foreground">
                     Ваше имя *
                   </label>
                   <input
+                    id="final-name"
                     {...register("name")}
                     className="input-field"
                     placeholder="Иван Петров"
                   />
                   {errors.name && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.name.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="final-phone" className="mb-2 block text-sm font-medium text-foreground">
                     Телефон *
                   </label>
                   <input
+                    id="final-phone"
                     {...register("phone")}
                     type="tel"
                     className="input-field"
                     placeholder="+7 (495) 123-45-67"
                   />
                   {errors.phone && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.phone.message}
                     </p>
                   )}
@@ -100,26 +102,28 @@ export default function FinalApplicationForm() {
               </div>
               <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="final-email" className="mb-2 block text-sm font-medium text-foreground">
                     Email *
                   </label>
                   <input
+                    id="final-email"
                     {...register("email")}
                     type="email"
                     className="input-field"
                     placeholder="ivan@company.ru"
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-sm text-red-400">
+                    <p role="alert" className="mt-1.5 text-sm text-red-400">
                       {errors.email.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">
+                  <label htmlFor="final-company" className="mb-2 block text-sm font-medium text-foreground">
                     Компания
                   </label>
                   <input
+                    id="final-company"
                     {...register("company")}
                     className="input-field"
                     placeholder="ООО «СтройГрупп»"
@@ -127,10 +131,11 @@ export default function FinalApplicationForm() {
                 </div>
               </div>
               <div className="mb-6">
-                <label className="mb-2 block text-sm font-medium text-foreground">
+                <label htmlFor="final-objectType" className="mb-2 block text-sm font-medium text-foreground">
                   Тип объекта *
                 </label>
                 <select
+                  id="final-objectType"
                   {...register("objectType")}
                   className="input-field appearance-none"
                   defaultValue=""
@@ -146,16 +151,17 @@ export default function FinalApplicationForm() {
                   <option value="other">Другое</option>
                 </select>
                 {errors.objectType && (
-                  <p className="mt-1.5 text-sm text-red-400">
+                  <p role="alert" className="mt-1.5 text-sm text-red-400">
                     {errors.objectType.message}
                   </p>
                 )}
               </div>
               <div className="mb-5">
-                <label className="mb-2 block text-sm font-medium text-foreground">
+                <label htmlFor="final-message" className="mb-2 block text-sm font-medium text-foreground">
                   Сообщение
                 </label>
                 <textarea
+                  id="final-message"
                   {...register("message")}
                   rows={3}
                   className="input-field resize-none"
@@ -163,7 +169,7 @@ export default function FinalApplicationForm() {
                 />
               </div>
               <div className="mb-6">
-                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-border-strong bg-card px-5 py-4 transition-colors hover:border-copper-500/40 hover:bg-card-hover">
+                <label htmlFor="final-file" className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-border-strong bg-card px-5 py-4 transition-colors hover:border-copper-500/40 hover:bg-card-hover">
                   <Upload size={18} className="text-copper-400" />
                   <span className="text-sm text-muted">
                     {file
@@ -171,6 +177,7 @@ export default function FinalApplicationForm() {
                       : "Прикрепить файл (PDF, DWG, DOC, JPG до 10 МБ)"}
                   </span>
                   <input
+                    id="final-file"
                     ref={fileRef}
                     type="file"
                     accept=".pdf,.doc,.docx,.dwg,.jpg,.jpeg,.png"
@@ -181,7 +188,7 @@ export default function FinalApplicationForm() {
                 </label>
               </div>
               {state.error && (
-                <p className="mb-4 text-center text-sm text-red-400">
+                <p role="alert" className="mb-4 text-center text-sm text-red-400">
                   {state.error}
                 </p>
               )}

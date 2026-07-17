@@ -56,12 +56,12 @@ export default function TestimonialsSection() {
         <div className="mb-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((item, idx) => (
             <FadeIn key={item.id} delay={idx * 100}>
-              <div className="card-base group sheen edge-glow flex h-full flex-col p-6 transition-all duration-200 hover:border-border-strong hover:shadow-xl">
+              <figure className="card-base group sheen edge-glow flex h-full flex-col p-6 transition-all duration-200 hover:border-border-strong hover:shadow-xl">
                 <Quote size={24} className="mb-4 shrink-0 text-copper-500/40" />
-                <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">
+                <blockquote className="mb-6 flex-1 text-sm leading-relaxed text-muted">
                   {item.text}
-                </p>
-                <div className="flex items-center gap-3 border-t border-border pt-4">
+                </blockquote>
+                <figcaption className="flex items-center gap-3 border-t border-border pt-4">
                   <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border">
                     <Image
                       src={item.image}
@@ -79,8 +79,8 @@ export default function TestimonialsSection() {
                       {item.role}, {item.company}
                     </p>
                   </div>
-                </div>
-              </div>
+                </figcaption>
+              </figure>
             </FadeIn>
           ))}
         </div>

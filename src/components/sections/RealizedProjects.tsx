@@ -83,7 +83,11 @@ export default function RealizedProjects() {
           {/* Compact tiles */}
           {rest.map((project, idx) => (
             <FadeIn key={project.id} delay={idx * 70}>
-              <div className="group sheen relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-border-strong hover:shadow-xl">
+              <button
+                type="button"
+                className="group sheen relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:border-border-strong hover:shadow-xl"
+                aria-label={`${project.title} — ${project.category}`}
+              >
                 <div className="relative aspect-[16/10] overflow-hidden bg-surface">
                   <Image
                     src={project.image}
@@ -117,7 +121,7 @@ export default function RealizedProjects() {
                     </div>
                   )}
                 </div>
-              </div>
+              </button>
             </FadeIn>
           ))}
         </div>
