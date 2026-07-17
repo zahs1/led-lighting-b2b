@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { analogFormSchema, type AnalogFormType } from "@/lib/validations";
-import { Search, Loader2, Upload, Lightbulb } from "lucide-react";
+import { Search, Loader2, Upload } from "lucide-react";
 
 import FadeIn from "@/components/FadeIn";
 import Honeypot from "@/components/Honeypot";
@@ -174,9 +174,7 @@ export default function FindAnalogBlock() {
                 </button>
               </form>
             </FadeIn>
-            <div className="hidden h-56 w-56 shrink-0 items-center justify-center rounded-lg border border-border bg-card md:flex">
-              <Lightbulb size={80} className="text-copper-400/60" strokeWidth={1} />
-            </div>
+
           </div>
         </div>
       </div>
