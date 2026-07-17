@@ -63,13 +63,12 @@ export default function CategoriesGrid() {
                 >
                   {/* Media */}
                   <div
-                    className={`relative overflow-hidden bg-surface ${
+                    className={`overflow-hidden bg-surface ${
                       isAnchor
                         ? "absolute inset-0"
-                        : // min-h критичен для next/image fill: без явной высоты
-                          // родителя (на mobile flex-col card без auto-rows) Image
-                          // получает height 0 и не рендерится.
-                          "aspect-[16/10] min-h-[180px] flex-1"
+                        : // relative + min-h критичны: relative даёт контекст
+                          // для absolute-дочерних badge/chip, min-h для fill-image
+                          "relative aspect-[16/10] min-h-[180px] flex-1"
                     }`}
                   >
                     <Image
