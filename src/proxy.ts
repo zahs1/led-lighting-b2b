@@ -5,8 +5,9 @@ import { NextResponse, type NextRequest } from "next/server";
  *
  * Next.js (App Router) парсит 'nonce-<value>' из CSP header во время
  * server-side рендеринга и автоматически применяет nonce к своим инлайн-скриптам
- * (React/Next runtime, RSC flight data, гидрация) и инлайн-стилям. Поэтому
- * 'unsafe-inline' для скриптов и стилей в production больше не нужен.
+ * (React/Next runtime, RSC flight data, гидрация). Однако client-side стили
+ * (Framer Motion, styled-components) не получают nonce — поэтому для style-src
+ * используется 'unsafe-inline' (стандартный подход для SPA с CSS-in-JS).
  *
  * CSP ставится в два места:
  *  - request headers (через NextResponse.next({ request: { headers } })) —
@@ -15,9 +16,7 @@ import { NextResponse, type NextRequest } from "next/server";
  *
  * В dev к script-src добавляется 'unsafe-eval', так как React использует eval
  * для отладочной информации (рекомендация из docs Next.js). В production
- * 'unsafe-eval' отсутствует. Аналогично style-src в dev использует
- * 'unsafe-inline', а в production — 'nonce-<nonce>' (Next.js применяет nonce
- * к инлайн-<style> во время SSR).
+ * 'unsafe-eval' отсутствует.
  *
  * ВАЖНО: nonce применяется только при dynamic rendering. Static-страницы
  * генерируются в build time без nonce, поэтому в src/app/layout.tsx и
@@ -35,7 +34,7 @@ export function proxy(request: NextRequest) {
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ""};
-    style-src 'self' ${isDev ? "'unsafe-inline'" : `'nonce-${nonce}'`};
+    style-src 'self' 'unsafe-inline';
     img-src 'self' data:;
     font-src 'self' data:;
     connect-src 'self' https://api.resend.com https://*.bitrix24.ru;
